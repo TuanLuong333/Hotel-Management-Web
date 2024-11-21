@@ -1,0 +1,51 @@
+extends ../../layouts/default.pug
+
+block main
+  h1 Products
+
+  .card
+    .card-header
+      h3 Product Management
+    .card-body
+      .button-group
+        button(
+          class="btn btn-sm ml-1 btn-outline-success active"
+          button-status=""
+        ) Tất cả
+        button(
+          class="btn btn-sm ml-1 btn-outline-success"
+          button-status="active"
+        ) Hoạt động
+        button(
+          class="btn btn-sm ml-1 btn-outline-success"
+          button-status="inactive"
+        ) Dừng hoạt động
+    .card-footer
+      p Manage your products easily
+
+  table.table.table-hover.table-sm
+    thead
+      tr
+        th STT
+        th Hình ảnh
+        th Tiêu đề
+        th Giá
+        th Trạng thái
+        th Hành động
+    tbody
+      each product, index in products
+        tr
+          td= index + 1
+          td
+            img(src=product.thumbnail, alt=product.title, width="100px", height="auto")
+          td= product.title
+          td= product.price + ' $'
+          td
+            if product.status == "active"
+              span.badge.badge-success Hoạt động
+            else
+              span.badge.badge-danger Dừng hoạt động
+          td
+            a.btn.btn-primary(href=`/admin/products/edit/${product._id}`) Edit
+            a.btn.btn-danger(href=`/admin/products/delete/${product._id}`) Delete
+  a(href='/admin/products/new') Add New Product

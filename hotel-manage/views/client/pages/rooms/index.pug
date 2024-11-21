@@ -1,0 +1,27 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main 
+  h1 Searched Room
+
+  // Container for the room display
+  .container
+    h1 Rooms Available
+    
+    // Navigation buttons
+    .mb-4
+      a.btn.btn-secondary(href="javascript:history.back()") Back
+      a.btn.btn-primary(href="http://localhost:5000") Home
+
+    .row
+      each item in Room
+        .col-md-4
+          .card.mb-4
+            // img.card-img-top(src=room.img, alt=`Image of ${room.location}`)
+            .card-body
+              h5.card-title= location
+              p.card-text Type: #{item.type}
+              p.card-text RoomNum: #{item.room_number}
+              p.card-text Capacity: #{item.capacity}
+              p.card-text ID: #{item.room_id}
+              p.card-text Cost: #{item.price}$

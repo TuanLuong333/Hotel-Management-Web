@@ -1,0 +1,154 @@
+<<<<<<< HEAD
+extends ../../layouts/default.pug
+
+block main 
+ h1 Trang chủ khách sạn
+ form(id="form-search")
+  .input-group
+    input(
+      type="text"
+      placeholder="Địa điểm"
+      name="location"
+      class="form-control"
+      value=location
+    )
+    input(
+      type="date"
+      placeholder="Ngày"
+      name="datetime"
+      class="form-control"
+      value=date
+    )
+    input(
+      type="number"
+      placeholder="Số lượng người"
+      name="guests"
+      class="form-control"
+      min="1"
+      value=guests
+    )
+    input(
+      type="number"
+      placeholder="Số lượng phòng"
+      name="rooms"
+      class="form-control"
+      min="1"
+      value=rooms 
+    )
+    .input-group-append
+      button(
+        class="btn btn-success"
+        type="submit"
+      ) Tìm kiếm
+ 
+ table.table.table-hover.table-sm
+  thead
+    tr
+      th STT
+      th Vị trí
+      th Ngày
+      th Khách
+      th Số phòng
+      th Đã sử dụng
+      th Hành động
+  tbody
+    each item, index in Room
+      tr
+        td= index + 1
+        td= item.location
+        td= item.datetime.toLocaleDateString() 
+        td= item.guests
+        td= item.rooms
+        td
+          if item.used
+            span.badge.badge-success Đã sử dụng
+          else
+            span.badge.badge-danger Chưa sử dụng
+        td
+          a.btn.btn-primary(href=`/admin/rooms/edit/${item.id}`) Edit
+          a.btn.btn-danger(href=`/admin/rooms/delete/${item.id}`) Delete
+
+
+=======
+extends ../../layouts/default.pug
+include ../../mixins/pagination.pug
+
+block main 
+  h1 Trang chủ khách sạn
+  .auth-buttons.d-flex.justify-content-end.mb-3
+    button(
+      class="btn btn-primary mr-2"
+      type="button"
+      onclick="window.location.href='/author/register'"
+    ) Đăng ký
+    button(
+      class="btn btn-secondary"
+      type="button"
+      onclick="window.location.href='/author/login'"
+    ) Đăng nhập
+
+  form(id="form-search")
+    .input-group
+      input(
+        type="text"
+        placeholder="Địa điểm"
+        name="address"
+        class="form-control"
+        value=address
+      )
+      input(
+        type="text"
+        placeholder="Loại"
+        name="room_type"
+        class="form-control"
+        value=room_type
+      )
+      input(
+        type="number"
+        placeholder="Số lượng người"
+        name="capacity"
+        class="form-control"
+        min="1"
+        value=capacity
+      )
+      .input-group-append
+        button(
+          class="btn btn-success"
+          type="submit"
+        ) Tìm kiếm
+
+
+  table.table.table-hover.table-sm 
+    thead
+        tr
+            th STT
+            th Vị trí
+            th Loại phòng
+            th Giá mỗi đêm
+            th Sức chứa
+            th Trạng thái
+            th View
+    tbody
+        each item, index in Room
+            tr
+                td= index + 1
+                td= item.Hotel ? item.Hotel.address : 'Không có vị trí'
+                td= item.room_type
+                td= item.price ? `${item.price} VND` : 'Không có giá'
+                td= item.capacity ? `${item.capacity} người` : 'Không xác định'
+                td
+                    if item.status === 'available'
+                        span.badge.badge-success Có sẵn
+                    else if item.status === 'booked'
+                        span.badge.badge-warning Đã đặt
+                    else if item.status === 'maintenance'
+                        span.badge.badge-danger Đang bảo trì
+                    else
+                        span.badge.badge-secondary Không xác định
+                td
+                    a.btn.btn-info.btn-sm(href=`/rooms/?room_id=${item.room_id}`) Chi tiết
+  
+  +pagination(pagination)
+
+           
+>>>>>>> 1c6f5cc (admin/dashboard - rooms)
