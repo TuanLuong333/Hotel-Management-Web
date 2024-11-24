@@ -1,0 +1,30 @@
+doctype html
+html
+  head
+    title #{pageTitle}
+    // Link to Bootstrap stylesheet
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css")
+    // The leading / indicates to the server to look in the public folder
+     link(rel="stylesheet", href="/css/style.css")
+
+     link(rel="stylesheet", href="/admin/css/style.css")
+
+  body
+  
+    // Include header from partial file
+    include ../partials/header.pug
+
+    .body
+     include ../partials/sider.pug
+
+     .main
+        block main
+
+    // Include footer from partial file
+    include ../partials/footer.pug
+
+    // Add jQuery and Bootstrap scripts for interaction
+    script(src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js")
+
+    script(src="/admin/js/script.js")

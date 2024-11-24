@@ -1,0 +1,55 @@
+extends ../../layouts/default.pug
+
+
+block main
+  h1 Booking Manage
+
+//-   .card
+//-     .card-header
+//-       h3 Hotel Management
+//-     .card-body
+//-       .button-group
+//-         button(
+//-           class="btn btn-sm ml-1 btn-outline-success active"
+//-           button-status=""
+//-         ) Tất cả
+//-         button(
+//-           class="btn btn-sm ml-1 btn-outline-success"
+//-           button-status="active"
+//-         ) available
+//-         button(
+//-           class="btn btn-sm ml-1 btn-outline-success"
+//-           button-status="inactive"
+//-         ) unavailable
+//-     .card-footer
+//-       p Manage your customer volume easily
+
+//-   table.table.table-hover.table-sm 
+//-     thead
+//-         tr
+//-             th STT
+//-             th Vị trí
+//-             th Loại phòng
+//-             th Giá mỗi đêm
+//-             th Sức chứa
+//-             th Trạng thái
+//-             th View
+//-     tbody
+//-         each item, index in Room
+//-             tr
+//-                 td= index + 1
+//-                 //- td= item.Hotel ? item.Hotel.address : 'Không có vị trí'
+//-                 td= item.room_type
+//-                 td= item.price ? `${item.price} VND` : 'Không có giá'
+//-                 td= item.capacity ? `${item.capacity} người` : 'Không xác định'
+//-                 td
+//-                     if item.status === 'available'
+//-                         span.badge.badge-success Có sẵn
+//-                     else if item.status === 'booked'
+//-                         span.badge.badge-warning Đã đặt
+//-                     else if item.status === 'maintenance'
+//-                         span.badge.badge-danger Đang bảo trì
+//-                     else
+//-                         span.badge.badge-secondary Không xác định
+//-                 td
+//-                     a.btn.btn-info.btn-sm(href=`/admin/rooms/?room_id=${item.room_id}`) Chi tiết

@@ -1,0 +1,12 @@
+# Thư mục node_modules (cho dự án Node.js)
+node_modules/
+
+# Tệp môi trường
+.env
+
+# Các tệp log
+*.log
+
+# Các tệp hệ điều hành tạo ra
+.DS_Store
+Thumbs.db

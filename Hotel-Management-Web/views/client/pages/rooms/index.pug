@@ -1,0 +1,61 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main 
+  h1 Searched Room
+
+  .container
+    h1 Rooms Available
+    
+    .mb-4
+      a.btn.btn-secondary(href="javascript:history.back()") Back
+      a.btn.btn-primary(href="http://localhost:5000") Home
+
+    .row
+      each item in Room
+        .col-md-4
+          .card.mb-4
+            img.card-img-top(src=item.thumbnail)
+            .card-body
+              h5.card-title= item.Hotel ? item.Hotel.location : 'Không có vị trí'
+              p.card-text Type: #{item.type}
+              p.card-text RoomNum: #{item.room_number}
+              p.card-text Capacity: #{item.capacity}
+              p.card-text Cost: #{item.price}$
+              button.btn.btn-success(onclick=`openBookingModal(${item.room_id})`) Booking
+              
+    // Modal form for booking
+    #bookingModal.modal.fade
+      .modal-dialog
+        .modal-content
+          .modal-header
+            h5.modal-title Booking Information
+            button.close(type="button", data-dismiss="modal") ×
+          .modal-body
+            form#bookingForm
+              input(type="hidden", name="room_id")
+              
+              .form-group
+                label(for="customer_name") Name
+                input.form-control(type="text", name="customer_name", required)
+              
+              .form-group
+                label(for="customer_email") Email
+                input.form-control(type="email", name="customer_email", required)
+              
+              .form-group
+                label(for="customer_phone") Phone
+                input.form-control(type="text", name="customer_phone", required)
+              
+              // Thêm trường nhập ngày check-in
+              .form-group
+                label(for="check_in_date") Check-in Date
+                input.form-control(type="date", name="check_in_date", required)
+
+              // Thêm trường nhập ngày check-out
+              .form-group
+                label(for="check_out_date") Check-out Date
+                input.form-control(type="date", name="check_out_date", required)
+              
+              button.btn.btn-primary(type="button", onclick="submitBooking()") Submit
+

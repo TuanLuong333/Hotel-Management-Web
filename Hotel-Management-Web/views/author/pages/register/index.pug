@@ -1,0 +1,19 @@
+extends ../../layouts/default.pug
+
+
+block main
+    h1 Register Site
+    form#registerForm
+      label(for="email") Email:
+      input(type="email" id="email" name="email" placeholder="Email" required)
+
+      label(for="username") Username:
+      input(type="text" id="username" name="username" placeholder="Username" required)
+
+      label(for="password") Password:
+      input(type="password" id="password" name="password" placeholder="Password" required)
+
+      button(
+            class="btn btn-success"
+            type="submit"
+          ) Đăng ký
