@@ -30,7 +30,7 @@ CREATE TABLE `addresses` (
   `country` varchar(45) DEFAULT NULL,
   `zipcode` varchar(8) DEFAULT NULL,
   PRIMARY KEY (`address_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +95,7 @@ CREATE TABLE `hotels` (
   PRIMARY KEY (`hotel_id`),
   KEY `address_id` (`address_id`),
   CONSTRAINT `hotels_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`address_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,9 +133,9 @@ CREATE TABLE `rooms` (
   `thumbnail` text,
   `status` enum('Available','Booked','Maintenance') DEFAULT 'Available',
   PRIMARY KEY (`room_id`),
-  KEY `hotel_id` (`hotel_id`),
-  CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
+  KEY `rooms_ibfk_1` (`hotel_id`),
+  CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,4 +165,4 @@ CREATE TABLE `services` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-29  1:12:15
+-- Dump completed on 2024-12-03 17:57:49
