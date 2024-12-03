@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `hotelmanagement` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `hotelmanagement`;
 -- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: hotelmanagement_simple
@@ -50,10 +52,9 @@ CREATE TABLE `bookings` (
   `total_amount` decimal(10,2) DEFAULT NULL,
   `status` enum('confirm','reject') DEFAULT NULL,
   PRIMARY KEY (`booking_id`),
-  KEY `hotel_id` (`hotel_id`),
   KEY `room_id` (`room_id`),
-  CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`),
-  CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`)
+  KEY `bookings_ibfk_1` (`hotel_id`),
+  CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -73,8 +74,8 @@ CREATE TABLE `employees` (
   `position` enum('Manager','Receptionist','Housekeeper','Chef','Security','Maintenance','Other') DEFAULT 'Other',
   `hotel_id` int DEFAULT NULL,
   PRIMARY KEY (`employee_id`),
-  KEY `hotel_id` (`hotel_id`),
-  CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`)
+  KEY `employees_ibfk_1` (`hotel_id`),
+  CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -151,8 +152,8 @@ CREATE TABLE `services` (
   `service_name` varchar(100) DEFAULT NULL,
   `cost` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`service_id`),
-  KEY `hotel_id` (`hotel_id`),
-  CONSTRAINT `services_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`)
+  KEY `services_ibfk_1` (`hotel_id`),
+  CONSTRAINT `services_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -165,4 +166,4 @@ CREATE TABLE `services` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-03 17:57:49
+-- Dump completed on 2024-12-03 21:15:57
