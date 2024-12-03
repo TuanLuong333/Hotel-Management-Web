@@ -1,0 +1,11 @@
+extends ../layouts/default.pug
+
+
+block main
+  h1 Log - Reg
+
+  // Tạo hai nút bấm cho Customer và Admin
+  a(href="http://localhost:5000") 
+    button Customer
+  a(href="/admin/dashboard")
+    button Admin

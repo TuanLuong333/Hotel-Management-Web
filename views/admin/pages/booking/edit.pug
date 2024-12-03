@@ -1,0 +1,45 @@
+extends ../../layouts/default.pug
+include ../../mixins/pagination.pug
+
+block main
+  h1 Booking Manage
+
+  .container
+    h1 Rooms Available
+    
+    .mb-4
+      a.btn.btn-secondary(href="javascript:history.back()") Back
+      a.btn.btn-primary(href="http://localhost:5000/admin/dashboard") Dashboard
+
+    .row
+      each item in Booking
+        .col-md-4
+          .card.mb-4
+            .card-body
+              h5.card-title= item.booking_id
+              form(id="booking-form", method="POST")
+                input(type="hidden", name="booking_id", value=item.booking_id)
+                .mb-3
+                  label(for='guest_name') Guest Name
+                  input.form-control(type='text', id='guest_name', name='guest_name', value=item.guest_name)
+                .mb-3
+                  label(for='hotel_id') Hotel ID
+                  input.form-control(type='text', id='hotel_id', name='hotel_id', value=item.hotel_id)
+                .mb-3
+                  label(for='room_id') Room ID
+                  input.form-control(type='text', id='room_id', name='room_id', value=item.room_id)
+                .mb-3
+                  label(for='check_in_date') Check-in Date
+                  input.form-control(type='date', id='check_in_date', name='check_in_date', value=item.check_in_date)
+                .mb-3
+                  label(for='check_out_date') Check-out Date
+                  input.form-control(type='date', id='check_out_date', name='check_out_date', value=item.check_out_date)
+                .mb-3
+                  label(for='total_amount') Total Amount
+                  input.form-control(type='number', id='total_amount', name='total_amount', value=item.total_amount)
+                .mb-3
+                  label(for='status') Status
+                  select.form-control(id='status', name='status', value = item.status)
+                    option(value='confirm', selected=item.status === 'confirm') Confirm
+                    option(value='reject', selected=item.status === 'reject') Reject
+                button.btn.btn-success(type='submit') Save Changes

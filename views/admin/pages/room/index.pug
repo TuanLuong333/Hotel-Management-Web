@@ -1,0 +1,106 @@
+extends ../../layouts/default.pug
+include ../../mixins/pagination.pug
+
+block main
+  .card
+    .card-header
+      h3 Room Management
+    .card-body
+      .row
+        .col-6
+          each item in filterRoom
+            button(
+              class="btn btn-sm ml-1 btn-outline-success #{item.class}"
+              button-status=item.status
+            ) #{item.name}
+        .col-6
+          form(id="form-search")
+            .input-group
+              input(
+                type="text"
+                placeholder="Nhập từ khóa"
+                name="keyword"
+                class="form-control"
+                id="keyword"
+                value=keyword
+              )
+              .input-group-append
+                button(
+                  class="btn btn-success"
+                  type="submit"
+                ) Tìm
+              select(
+                class="form-control"
+                name="column"
+                id="column-select"
+              )
+                option(value="0") Id khách sạn
+                option(value="1") Số phòng
+                option(value="2") Loại phòng
+                option(value="3") Số lượng người
+                option(value="4") Ảnh minh họa
+
+        .card-footer
+          p Manage your room volume easily
+          a.btn.btn-primary(href='/admin/rooms/add') Thêm room mới
+
+
+
+  table.table.table-hover.table-sm
+    thead
+      tr
+        th STT
+        th Id khách sạn
+        th Số phòng
+        th Loại phòng
+        th Số lượng người
+        th Ảnh minh họa
+        th Trạng thái
+    tbody
+      each item, index in Room
+        tr
+          td= index + 1
+          td= item.hotel_id
+          td= item.room_number
+          td= item.room_type
+          td= item.capacity
+          td
+            if item.thumbnail
+              img(src=item.thumbnail, alt="Room Thumbnail", class="img-fluid" style="max-width: 100px; height: auto;")
+            else
+              p No Image Available
+          td
+            if item.status === 'Avaiable'
+              span.badge.badge-success Available
+            else if item.status === 'Booked'
+              span.badge.badge-warning Booked
+            else if item.status == 'Maintainance'
+              span.badge.badge-primary Maintainance
+            else 
+              span.badge.badge-secondary Không xác định 
+          td= item.total_amount
+          td
+            a.btn.btn-primary(href=`/admin/rooms/edit/?roomId=${item.room_id}`) Edit
+            button.btn.btn-danger(
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#deleteConfirmModal"
+              data-room-id=item.room_id
+            ) Delete
+            
+
+
+  +pagination(pagination)
+
+  //- Modal xác nhận xóa
+  .modal.fade(id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true")
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h5.modal-title(id="deleteConfirmModalLabel") Xác nhận xóa
+          button(type="button" class="btn-close" data-dismiss="modal" aria-label="Close")
+        .modal-body
+          p Bạn có chắc chắn muốn xóa room này không?
+        .modal-footer
+          button(type="button" class="btn btn-secondary" data-dismiss="modal") Hủy
+          button(type="button" class="btn btn-danger" id="roomconfirmDeleteBtn") Xóa

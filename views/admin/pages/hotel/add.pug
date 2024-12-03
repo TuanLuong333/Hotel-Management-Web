@@ -1,0 +1,29 @@
+extends ../../layouts/default.pug
+
+block main
+  h1 Thêm Hotel Mới
+
+  .card
+    .card-header
+      h3 Thêm thông tin Hotel
+    .card-body
+      a.btn.btn-primary(href="/admin/hotels") Quay lại
+      form(id="hoteladding-form" method="POST")
+        .form-group
+            label(for="name") Tên khách sạn
+            input(type="text", id="name", name="name", class="form-control", placeholder="Nhập tên khách sạn", maxlength="45")
+        .form-group
+            label(for="contact_number") Số điện thoại
+            input(type="text", id="contact_number", name="contact_number", class="form-control", placeholder="Nhập số điện thoại", maxlength="12")
+        .form-group
+            label(for="email_address") Email
+            input(type="email", id="email_address", name="email_address", class="form-control", placeholder="Nhập email khách sạn", maxlength="45")
+        .form-group
+            label(for="address_id") Mã địa chỉ
+            input(type="number", id="address_id", name="address_id", class="form-control", placeholder="Nhập mã địa chỉ")
+        .form-group
+            label(for="description") Mô tả
+            input(type="text", id="description", name="description", class="form-control", placeholder="Nhập mô tả khách sạn")
+        button.btn.btn-primary(type="submit") Lưu thông tin khách sạn
+        a.btn.btn-secondary(id="hotelcancel-button") Hủy
+

@@ -1,0 +1,40 @@
+extends ../../layouts/default.pug
+
+block main
+  h1 Thêm Hotel Mới
+
+  .card
+    .card-header
+      h3 Thêm thông tin Hotel
+    .card-body
+      a.btn.btn-primary(href="/admin/rooms") Quay lại
+      form(id="roomadding-form" method="POST")
+        .form-group
+            label(for="hotel_id") Hotel Id
+            input(type="text", id="hotel_id", name="hotel_id", class="form-control", placeholder="Nhập id khách sạn")
+        .form-group
+            label(for="room_number") Số phòng
+            input(type="text", id="room_number", name="room_number", class="form-control", placeholder="Nhập số phòng")
+        .form-group
+            label(for="status") Trạng thái
+            select(id="status", name="status", class="form-control")
+                option(value="Available") Available
+                option(value="Booked") Booked
+                option(value="Maintainance") Maintainance
+        .form-group
+            label(for="capacity") Số lượng người
+            input(type="number", id="capacity", name="capacity", class="form-control", placeholder="Nhập sức chứa cho phòng")
+        .form-group
+            label(for="thumbnail") Ảnh minh họa
+            input(type="text", id="thumbnail", name="thumbnail", class="form-control", placeholder="Nhập link ảnh")
+        .form-group
+            label(for="room_type") Loại phòng
+            select(id="room_type", name="room_type", class="form-control")
+                option(value='Single') Single
+                option(value='Double') Double
+                option(value='Suite') Suite
+                option(value='Family') Family
+                option(value='Luxury') Luxury
+        button.btn.btn-primary(type="submit") Lưu thông tin phòng
+        a.btn.btn-secondary(id="roomcancel-button") Hủy
+

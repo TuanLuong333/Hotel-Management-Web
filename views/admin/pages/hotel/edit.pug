@@ -1,0 +1,36 @@
+extends ../../layouts/default.pug
+include ../../mixins/pagination.pug
+
+block main
+
+  .container
+    h1 Room edition
+    
+    .mb-4
+      a.btn.btn-secondary(href="javascript:history.back()") Back
+      a.btn.btn-primary(href="http://localhost:5000/admin/dashboard") Dashboard
+
+    .row
+      each item in Hotel
+        .col-md-4
+          .card.mb-4
+            .card-body
+              h5.card-title= item.hotel_id
+              form(id="hotel-form", method="POST")
+                input(type="hidden", name="hotel_id", value=item.hotel_id)
+                .mb-3
+                  label(for='name') Name
+                  input.form-control(type='text', id='name', name='name', value=item.name)
+                .mb-3
+                  label(for='contact_number') contact_number
+                  input.form-control(type='text', id='contact_number', name='contact_number', value=item.contact_number)
+                .mb-3
+                  label(for='email_address') Email 
+                  input.form-control(type='text', id='email_address', name='email_address', value=item.email_address)
+                .mb-3
+                  label(for='address_id') Address_id
+                  input.form-control(type='number', id='address_id', name='address_id', value=item.address_id)
+                .mb-3
+                  label(for='description') Description
+                  input.form-control(type='text', id='description', name='description', value=item.description)
+                button.btn.btn-success(type='submit') Save Changes
