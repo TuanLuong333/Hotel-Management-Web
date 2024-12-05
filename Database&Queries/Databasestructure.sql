@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `hotelmanagement` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `hotelmanagement`;
+CREATE DATABASE  IF NOT EXISTS `hoteldemo` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `hoteldemo`;
 -- MySQL dump 10.13  Distrib 8.0.40, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: hotelmanagement_simple
+-- Host: 127.0.0.1    Database: hoteldemo
 -- ------------------------------------------------------
 -- Server version	8.0.40
 
@@ -32,7 +32,7 @@ CREATE TABLE `addresses` (
   `country` varchar(45) DEFAULT NULL,
   `zipcode` varchar(8) DEFAULT NULL,
   PRIMARY KEY (`address_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -51,11 +51,17 @@ CREATE TABLE `bookings` (
   `check_out_date` datetime DEFAULT NULL,
   `total_amount` decimal(10,2) DEFAULT NULL,
   `status` enum('confirm','reject') DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`booking_id`),
   KEY `room_id` (`room_id`),
   KEY `bookings_ibfk_1` (`hotel_id`),
-  CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+  KEY `idx_guest_name` (`guest_name`),
+  KEY `idx_check_in_out` (`check_in_date`,`check_out_date`),
+  CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`) ON DELETE CASCADE,
+  CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`) ON DELETE CASCADE,
+  CONSTRAINT `check_date` CHECK ((`check_in_date` < `check_out_date`))
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -69,14 +75,14 @@ CREATE TABLE `employees` (
   `employee_id` int NOT NULL AUTO_INCREMENT,
   `first_name` varchar(45) DEFAULT NULL,
   `last_name` varchar(45) DEFAULT NULL,
-  `email_address` varchar(45) DEFAULT NULL,
-  `contact_number` varchar(12) DEFAULT NULL,
+  `email_address` varchar(100) DEFAULT NULL,
+  `contact_number` varchar(20) DEFAULT NULL,
   `position` enum('Manager','Receptionist','Housekeeper','Chef','Security','Maintenance','Other') DEFAULT 'Other',
   `hotel_id` int DEFAULT NULL,
   PRIMARY KEY (`employee_id`),
   KEY `employees_ibfk_1` (`hotel_id`),
   CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -89,14 +95,14 @@ DROP TABLE IF EXISTS `hotels`;
 CREATE TABLE `hotels` (
   `hotel_id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(45) DEFAULT NULL,
-  `contact_number` varchar(12) DEFAULT NULL,
-  `email_address` varchar(45) DEFAULT NULL,
+  `contact_number` varchar(20) DEFAULT NULL,
+  `email_address` varchar(100) DEFAULT NULL,
   `address_id` int DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`hotel_id`),
   KEY `address_id` (`address_id`),
   CONSTRAINT `hotels_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`address_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -112,10 +118,13 @@ CREATE TABLE `payment` (
   `payment_date` datetime DEFAULT NULL,
   `payment_amount` decimal(10,2) DEFAULT NULL,
   `status` enum('Pending','Completed','Cancelled') DEFAULT 'Pending',
+  `payment_method` enum('Cash','Credit Card','Online Payment') DEFAULT 'Cash',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`payment_id`),
   KEY `booking_id` (`booking_id`),
   CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,7 +145,7 @@ CREATE TABLE `rooms` (
   PRIMARY KEY (`room_id`),
   KEY `rooms_ibfk_1` (`hotel_id`),
   CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,10 +160,13 @@ CREATE TABLE `services` (
   `hotel_id` int DEFAULT NULL,
   `service_name` varchar(100) DEFAULT NULL,
   `cost` decimal(10,2) DEFAULT NULL,
+  `booking_id` int DEFAULT NULL,
   PRIMARY KEY (`service_id`),
   KEY `services_ibfk_1` (`hotel_id`),
-  CONSTRAINT `services_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
+  KEY `services_ibfk_2` (`booking_id`),
+  CONSTRAINT `services_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`hotel_id`) ON DELETE CASCADE,
+  CONSTRAINT `services_ibfk_2` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -166,4 +178,4 @@ CREATE TABLE `services` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-03 21:15:57
+-- Dump completed on 2024-12-05 20:55:46
