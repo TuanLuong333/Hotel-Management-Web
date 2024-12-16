@@ -1,0 +1,37 @@
+extends ../../layouts/default.pug
+
+block main
+  h1 Thêm Booking Mới
+
+  .card
+    .card-header
+      h3 Thêm thông tin booking
+    .card-body
+      a.btn.btn-primary(href="/admin/bookings") Quay lại
+      form(id="adding-form" method="POST")
+        .form-group
+          label(for="guest_name") Khách hàng
+          input(type="text", id="guest_name", name="guest_name", class="form-control", placeholder="Nhập tên khách hàng", maxlength="100")
+        .form-group
+          label(for="room_id") Id phòng
+          input(type="text", id="room_id", name="room_id", class="form-control", placeholder="Nhập Id phòng", maxlength="50")
+        .form-group
+          label(for="hotel_id") Id khách sạn
+          input(type="text", id="hotel_id", name="hotel_id", class="form-control", placeholder="Nhập Id khách sạn", maxlength="50")
+        .form-group
+          label(for="check_in_date") Check-in Date
+          input(type="date", id="check_in_date", name="check_in_date", class="form-control")
+        .form-group
+          label(for="check_out_date") Check-out Date
+          input(type="date", id="check_out_date", name="check_out_date", class="form-control")
+        .form-group
+          label(for="total_amount") Tổng tiền
+          input(type="number", id="total_amount", name="total_amount", class="form-control", placeholder="Nhập tổng tiền")
+        .form-group
+          label(for="status") Trạng thái
+          select(id="status", name="status", class="form-control")
+            option(value="confirm") Confirmed
+            option(value="reject") Rejected
+        .form-group
+          button(type="submit", class="btn btn-primary") Thêm booking
+          a.btn.btn-secondary(id="cancel-button") Hủy

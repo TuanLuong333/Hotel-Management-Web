@@ -1,0 +1,30 @@
+doctype html
+html
+  head
+    title #{pageTitle}
+
+    // Nạp Bootstrap 5 CSS
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css")
+    
+    // Các file CSS tùy chỉnh
+    link(rel="stylesheet", href="/css/style.css")
+    link(rel="stylesheet", href="/admin/css/style.css")
+  
+  body
+    // Include header từ partial
+    include ../partials/header.pug
+
+    .body
+      include ../partials/sider.pug
+
+      .main
+        block main
+
+    // Include footer từ partial
+    include ../partials/footer.pug
+
+    // Nạp Bootstrap 5 JS (Không cần jQuery nữa)
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js") 
+
+    // File script tùy chỉnh
+    script(src="/admin/js/script.js")

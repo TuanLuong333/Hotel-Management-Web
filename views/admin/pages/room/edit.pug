@@ -1,0 +1,48 @@
+extends ../../layouts/default.pug
+include ../../mixins/pagination.pug
+
+block main
+  h1 Room Manage
+
+  .container
+    h1 Rooms Available
+    
+    .mb-4
+      a.btn.btn-secondary(href="javascript:history.back()") Back
+      a.btn.btn-primary(href="http://localhost:3000/admin/dashboard") Dashboard
+
+    .row
+      each item in Room
+        .col-md-4
+          .card.mb-4
+            .card-body
+              h5.card-title= item.room_id
+              form(id="room-form", method="POST")
+                input(type="hidden", name="room_id", value=item.room_id)
+                .mb-3
+                  label(for='hotel_id') Hotel Id
+                  input.form-control(type='text', id='hotel_id', name='hotel_id', value=item.hotel_id)
+                .mb-3
+                  label(for='room_number') Room number
+                  input.form-control(type='text', id='room_number', name='room_number', value=item.room_number)
+                .mb-3
+                  label(for='room_type') Room type
+                  select.form-control(id='room_type', name='room_type', value=item.room_type)
+                    option(value='Single', selected=item.room_type === 'Single') Single
+                    option(value='Double', selected=item.room_type === 'Double') Double
+                    option(value='Suite', selected=item.room_type === 'Suite') Suite
+                    option(value='Family', selected=item.room_type === 'Family') Family
+                    option(value='Luxury', selected=item.room_type === 'Luxury') Luxury
+                .mb-3
+                  label(for='capacity') Capacity
+                  input.form-control(type='text', id='capacity', name='capacity', value=item.capacity)
+                .mb-3
+                  label(for='thumbnail') Thumbnail
+                  input.form-control(type='text', id='thumbnail', name='thumbnail', value=item.thumbnail)
+                .mb-3
+                  label(for='status') Status
+                  select.form-control(id='status', name='status', value = item.status)
+                    option(value='Available', selected=item.status === 'Available') Available
+                    option(value='Booked', selected=item.status === 'Booked') Booked
+                    option(value='Maintainance', selected=item.status === 'Maintainance') Maintainance
+                button.btn.btn-success(type='submit') Save Changes

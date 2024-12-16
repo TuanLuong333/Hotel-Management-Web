@@ -1,0 +1,29 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  h1 Profile Page
+
+  form#editForm(action=`/profile/edit` method="POST")
+    //- Display user details with editable fields
+    ul
+      li
+        strong User ID:
+        span #{currentUser.user_id} // Non-editable
+      li
+        strong Username:
+        input(type="text" id="username" name="username" value=currentUser.username required)
+      li
+        strong Email:
+        input(type="email" id="email" name="email" value=currentUser.email required)
+      li
+        strong Phone Number:
+        input(type="text" id="phone_number" name="phone_number" value=currentUser.phone_number)
+      li
+        strong Full Name:
+        input(type="text" id="fullName" name="fullname" value=currentUser.fullName)
+
+    //- Save and Cancel buttons
+    .actions
+      button(type="submit" id="saveButton") Save Changes
+      button(type="button" id="cancelButton") Cancel

@@ -1,0 +1,18 @@
+// tableview.pug
+mixin tableView(data, columns, actions)
+  table
+    thead
+      tr
+        each column in columns
+          th= column.label
+    tbody
+      each item in data
+        tr
+          each column in columns
+            td= item[column.key]
+          // Hiển thị các hành động như sửa, xóa (nếu có)
+          if actions
+            td
+              each action in actions
+                button(onclick=`${action.handler}(item.id)`)= action.label
+
