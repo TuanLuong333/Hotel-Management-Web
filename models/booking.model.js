@@ -1,4 +1,3 @@
-// models/Booking.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const Hotel = require('./hotel.model');
@@ -19,14 +18,18 @@ const Booking = sequelize.define('Booking', {
         references: {
             model: Hotel,
             key: 'hotel_id'
-        }
+        },
+        onDelete: 'CASCADE',  // Xử lý khi hotel bị xóa
+        onUpdate: 'CASCADE'   // Xử lý khi hotel bị cập nhật
     },
     room_id: {
         type: DataTypes.INTEGER,
         references: {
             model: Room,
             key: 'room_id'
-        }
+        },
+        onDelete: 'CASCADE',  // Xử lý khi room bị xóa
+        onUpdate: 'CASCADE'   // Xử lý khi room bị cập nhật
     },
     check_in_date: {
         type: DataTypes.DATE,
