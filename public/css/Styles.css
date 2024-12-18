@@ -1,0 +1,109 @@
+body {
+    background-image: url('images/hotel1.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    margin: 0;
+    position: relative;
+  }
+  
+  body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70vh;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 0;
+  }
+  
+  .header-container {
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+  
+  .header-container h1 {
+    font-size: 24px;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    margin-top: 10px;
+  }
+  
+  .header-container button {
+    margin-top: 10px;
+    margin-left: auto;
+  }
+  
+  hr {
+    margin-top: 10px;
+  }
+  
+  main {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+    min-height: 72vh;
+  }
+  
+  table tbody tr {
+    font-weight: bold; /* Đậm các dòng */
+  }
+  
+  table tbody tr:nth-child(odd) {
+    background-color: #f8f9fa; 
+  }
+  
+  table tbody tr:nth-child(even) {
+    background-color: #e9ecef; 
+  }
+  
+  .serif-font {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 36px; /* Tùy chỉnh kích thước nếu cần */
+    color: #333; /* Thay đổi màu chữ nếu cần */
+  }
+
+  input.form-control {
+    border-radius: 20px; /* Bo góc các input */
+    font-size: 14px;
+  }
+  
+  button.btn-success {
+    border-radius: 20px; /* Bo góc nút tìm kiếm */
+  }
+  
+  input.form-control, button.btn-success {
+    height: 40px; /* Tăng chiều cao của input và button */
+  }
+
+  footer {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 0.5px solid #000;
+  }
+  
+
+  .pagination-container {
+    position: fixed;
+    bottom: 0; 
+    width: 100%; 
+    display: flex;
+    justify-content: left; 
+    padding: 10px 0;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1); 
+}
+
+.pagination {
+    display: flex;
+    justify-content: left; 
+    padding: 10px 0;
+}

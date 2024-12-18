@@ -36,6 +36,11 @@ const Room = sequelize.define('Room', {
         type: DataTypes.ENUM('Available', 'Booked', 'Maintenance'),
         allowNull: false,
         defaultValue: 'Available'
+    },
+    price: {
+        type: DataTypes.DECIMAL(10, 2), // Khai báo cột price
+        allowNull: false,
+        defaultValue: 0
     }
 }, {
     tableName: 'rooms',

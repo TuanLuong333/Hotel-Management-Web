@@ -1,7 +1,7 @@
 // config/database.js
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('hoteldemo', 'root', 'Tuan12345', {
+const sequelize = new Sequelize('hotelmanagement', 'root', 'Tuan12345', {
     host: 'localhost',
     dialect: 'mysql'
 });
