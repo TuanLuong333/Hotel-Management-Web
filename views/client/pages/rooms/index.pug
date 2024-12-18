@@ -9,7 +9,7 @@ block main
     
     .mb-4
       a.btn.btn-secondary(href="javascript:history.back()") Back
-      a.btn.btn-primary(href="http://localhost:5000") Home
+      a.btn.btn-primary(href="http://localhost:3000") Home
 
     .row
       each item in Room
@@ -50,4 +50,3 @@ block main
                 input.form-control(type="date", name="check_out_date", required)
               
               button.btn.btn-primary(type="button", onclick="submitBooking()") Submit
-

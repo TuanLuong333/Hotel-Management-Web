@@ -1,3 +1,4 @@
+// models/Room.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const Hotel = require('./hotel.model');
@@ -13,14 +14,11 @@ const Room = sequelize.define('Room', {
         references: {
             model: Hotel,
             key: 'hotel_id'
-        },
-        onDelete: 'CASCADE',  // Xử lý khi hotel bị xóa
-        onUpdate: 'CASCADE'   // Xử lý khi hotel bị cập nhật
+        }
     },
     room_number: {
         type: DataTypes.INTEGER,
-        allowNull: false,
-        unique: true  // Đảm bảo mỗi phòng có số phòng duy nhất
+        allowNull: false
     },
     room_type: {
         type: DataTypes.ENUM('Single', 'Double', 'Suite', 'Family', 'Luxury'),
@@ -38,6 +36,11 @@ const Room = sequelize.define('Room', {
         type: DataTypes.ENUM('Available', 'Booked', 'Maintenance'),
         allowNull: false,
         defaultValue: 'Available'
+    },
+    price: {
+        type: DataTypes.DECIMAL(10, 2), // Khai báo cột price
+        allowNull: false,
+        defaultValue: 0
     }
 }, {
     tableName: 'rooms',

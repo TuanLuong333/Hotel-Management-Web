@@ -1,3 +1,4 @@
+
 const RoomModel = require("../../models/room.model");
 const HotelModel = require("../../models/hotel.model");
 const { Op } = require("sequelize");
