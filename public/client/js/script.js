@@ -1,28 +1,3 @@
-// button status
-// const buttonsStatus = document.querySelectorAll("[button-status]");
-// if (buttonsStatus.length > 0) {
-//     let url = new URL(window.location.href);
-
-//     buttonsStatus.forEach(button => {
-//         button.addEventListener("click", () => {
-//             const status = button.getAttribute("button-status");
-
-//             if (status) {
-//                 url.searchParams.set("status", status);
-//             } else {
-//                 url.searchParams.delete("status");
-//             }
-
-//             window.location.href = url.href;
-//         });
-//     });
-// }
-// end button status
-
-
-
-
-// form search
 const formSearch = document.querySelector("#form-search");
 if (formSearch) {
   let url = new URL(window.location.href);
@@ -52,12 +27,9 @@ if (formSearch) {
     window.location.href = url.href;
   });
 }
-
 // end form search
 
-
 //Pagination
-
 const buttonsPagination = document.querySelectorAll("[button-pagination]");
 if (buttonsPagination) {
   let url = new URL(window.location.href);
@@ -74,6 +46,41 @@ if (buttonsPagination) {
   })
 }
 //EndPagination
+
+function changeButtonText(button, text) {
+  button.textContent = text;
+}
+
+function showDetails(button) {
+  const roomId = button.getAttribute('data-room-id');
+  const overlay = document.getElementById('layoutOverlay');
+  const content = overlay.querySelector('.overlay-content');
+
+  // Gửi yêu cầu AJAX để lấy thông tin chi tiết phòng
+  fetch(`/rooms/?room_id=${roomId}`)
+    .then(response => response.text())
+    .then(data => {
+      content.innerHTML = data; // Render nội dung chi tiết vào overlay
+      overlay.classList.add('active'); // Hiển thị overlay
+    })
+    .catch(error => {
+      console.error('Lỗi khi tải thông tin phòng:', error);
+      content.innerHTML = '<div class="content"><p>Lỗi khi tải thông tin phòng.</p></div>';
+      overlay.classList.add('active');
+    });
+}
+
+document.getElementById('layoutOverlay').addEventListener('click', function (event) {
+  if (event.target === this) {
+    this.classList.remove('active');
+  }
+});
+
+function bookRoom() {
+  // Hiển thị prompt yêu cầu người dùng nhập tên
+  var userName = prompt("Please enter your name to book this room:");
+}
+
 
 
 //booking

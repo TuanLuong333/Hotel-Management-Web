@@ -2,16 +2,10 @@ extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 
 block main 
-  h1 Searched Room
-
   .container
-    h1 Rooms Available
-    
     .mb-4
-      a.btn.btn-secondary(href="javascript:history.back()") Back
       a.btn.btn-primary(href="http://localhost:3000") Home
-
-    .row
+    .row.justify-content-center
       each item in Room
         .col-md-4
           .card.mb-4
@@ -50,4 +44,3 @@ block main
                 input.form-control(type="date", name="check_out_date", required)
               
               button.btn.btn-primary(type="button", onclick="submitBooking()") Submit
-
