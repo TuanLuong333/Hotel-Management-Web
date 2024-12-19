@@ -103,11 +103,15 @@ module.exports.delete = async (req, res) => {
 
 module.exports.edit = async (req, res) => {
 
-  const booking_id = req.query.BookingId;
+  const booking_id = req.query.booking_id;
 
   let find = {booking_id: booking_id};
 
-  const Booking = await BookingModel.findAll({booking_id: booking_id});
+  const Booking = await BookingModel.findAll({ where:{
+    booking_id: booking_id
+  }});
+
+  
 
   res.render("admin/pages/booking/edit", {
     pageTitle: "Trang chinh sua dat phong",

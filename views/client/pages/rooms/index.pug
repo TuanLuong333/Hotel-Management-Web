@@ -1,13 +1,118 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 
-block main 
+block head
+  meta(charset="UTF-8")
+  meta(name="viewport" content="width=device-width, initial-scale=1.0")
+  link(rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css")
+
+  style.
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between; 
+    }
+
+    .col-md-4 {
+      max-width: 33%;
+      flex: 1; 
+    }
+
+    .card {
+      width: 100%; 
+    }
+
+    .card-img-top {
+      width: 100%; /* Đảm bảo ảnh chiếm toàn bộ chiều rộng của card */
+      height: 250px; /* Thay đổi chiều cao của ảnh, bạn có thể điều chỉnh giá trị này */
+      object-fit: cover; /* Giúp ảnh không bị méo và vừa với khu vực ảnh */
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 400px;
+      max-width: 30%;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column; 
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      text-align: left;
+    }
+    .form-group label {
+      margin-bottom: 5px; /* Khoảng cách giữa label và input */
+      text-align: left; /* Đảm bảo label nằm ở bên trái */
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-success {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+      color: white;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      color: white;
+    }
+
+block main
   .container
     .mb-4
       a.btn.btn-primary(href="http://localhost:3000") Home
-    .row.justify-content-center
+    .row.justify-content-center.d-flex.flex-wrap
       each item in Room
-        .col-md-4
+        .col-md-4.mb-4
           .card.mb-4
             img.card-img-top(src=item.thumbnail)
             .card-body
@@ -18,29 +123,36 @@ block main
               p.card-text Cost: #{item.price}$
               button.btn.btn-success(onclick=`openBookingModal(${item.room_id})`) Booking
               
-    // Modal form for booking
-    #bookingModal.modal.fade
-      .modal-dialog
-        .modal-content
-          .modal-header
-            h5.modal-title Booking Information
-            button.close(type="button", data-dismiss="modal") ×
-          .modal-body
-            form#bookingForm
-              input(type="hidden", name="room_id")
-              
-              .form-group
-                label(for="guest_name") Name
-                input.form-control(type="text", name="guest_name", required)
-                
-              // Thêm trường nhập ngày check-in
-              .form-group
-                label(for="check_in_date") Check-in Date
-                input.form-control(type="date", name="check_in_date", required)
+    .modal#bookingModal
+      .modal-content
+        .modal-header
+          h6 Booking room
+          button(type="button" onclick="closeBookingModal()") X
+        .modal-body
+          form#bookingForm
+            input(type="hidden", name="room_id")
 
-              // Thêm trường nhập ngày check-out
-              .form-group
-                label(for="check_out_date") Check-out Date
-                input.form-control(type="date", name="check_out_date", required)
-              
-              button.btn.btn-primary(type="button", onclick="submitBooking()") Submit
+            .form-group
+              label(for="userName") Name:
+              input(type="text" id="userName" placeholder="Enter your name")
+            .form-group
+              label(for="checkIn") Check-in Date:
+              input#checkIn(type="Date" placeholder="Select Check-in Date")
+            .form-group
+              label(for="checkOut") Check-out Date:
+              input#checkOut(type="Date" placeholder="Select Check-out Date")
+            .form-group
+              label(for="service_choice") Prefer Service
+              .form-check
+                input.form-check-input(type="radio", name="service_choice", value="yes", id="service_yes")
+                label.form-check-label(for="service_yes") Yes
+            .modal-footer
+              button.btn.btn-secondary(onclick="closeBookingModal()") Close
+              button.btn.btn-primary(onclick="submitBooking()") Book Room
+  script.
+    $(function() {
+      $("#checkIn, #checkOut").datepicker({
+        dateFormat: "yy-mm-dd",
+        minDate: 0
+      });
+    });

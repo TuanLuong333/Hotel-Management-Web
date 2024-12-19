@@ -20,6 +20,26 @@ if (buttonsStatus.length > 0) {
 }
 // end button booking status
 
+
+// pagination
+const buttonsPagination = document.querySelectorAll("[button-pagination]");
+if (buttonsPagination) {
+  let url = new URL(window.location.href);
+  console.log("being in pagination");
+
+  buttonsPagination.forEach(button => {
+    button.addEventListener("click", () => {
+      const page = button.getAttribute("button-pagination");
+
+      url.searchParams.set("page", page);
+
+      window.location.href = url.href;
+    })
+  })
+}
+// end pagination
+
+
 // form search
 // const formSearch = document.querySelector("#form-search");
 // if(formSearch) {
@@ -522,3 +542,285 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // end cancel button
+
+
+
+// ------------------ code logic for statistic
+//--1
+
+document.getElementById('query1').addEventListener('submit', async function(event) {
+  event.preventDefault(); 
+
+  const roomType = document.getElementById('room_type').value;
+
+  if (roomType) {
+    console.log('Đã chọn loại phòng:', roomType);
+    try {
+      // Gửi dữ liệu qua GET request với query string
+      const response = await fetch(`/admin/statistics/query1?roomType=${roomType}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',  // Set content type to JSON
+        }
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+  
+        console.log('Dữ liệu:', result);
+
+        // Hiển thị kết quả lên giao diện người dùng
+        displayResults(result);
+      } else {
+        const result = await response.json();
+        alert('Có lỗi xảy ra: ' + result.message);
+      }
+    } catch (error) {
+      console.error('Lỗi:', error);
+      alert('Có lỗi xảy ra trong quá trình gửi dữ liệu');
+    }
+  } else {
+    console.log('Chưa chọn loại phòng');
+  }
+});
+
+// Hàm để hiển thị kết quả lên giao diện người dùng
+function displayResults(data) {
+  const resultContainer = document.getElementById('result-container');
+  resultContainer.innerHTML = '';  // Clear previous results
+
+  if (data.length === 0) {
+    resultContainer.innerHTML = '<p>Không có dữ liệu cho loại phòng này.</p>';
+  } else {
+    const table = document.createElement('table');
+    table.classList.add('table', 'table-bordered');
+    const thead = table.createTHead();
+    const row = thead.insertRow();
+    row.insertCell(0).textContent = 'Loại phòng';
+    row.insertCell(1).textContent = 'Tổng doanh thu';
+
+    const tbody = table.createTBody();
+    data.forEach(item => {
+      const row = tbody.insertRow();
+      row.insertCell(0).textContent = item.room_type;
+      row.insertCell(1).textContent = item.total_revenue;
+    });
+
+    resultContainer.appendChild(table);
+  }
+}
+
+//--2
+document.getElementById('query2').addEventListener('submit', async function(event) {
+  event.preventDefault();  
+
+  const roomType = document.getElementById('room_type2').value;
+
+  if (roomType) {
+      try {
+          // Gửi yêu cầu GET đến server với loại phòng được chọn
+          const response = await fetch(`/admin/statistics/query2?roomType=${roomType}`, {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+              }
+          });
+
+          if (response.ok) {
+              const data = await response.json();
+              // In kết quả trả về vào phần tử #statistics-result
+              const resultElement = document.getElementById('statistics-result');
+              resultElement.innerHTML = '';  // Clear kết quả cũ
+
+              // Kiểm tra nếu có dữ liệu và in ra
+              if (data.length > 0) {
+                  const item = data[0]; // Chỉ có một kết quả (tháng cao nhất)
+                  const listItem = document.createElement('li');
+                  listItem.textContent = `Tháng: ${item.peak_month} - Lượng đặt phòng: ${item.bookings_count}`;
+                  resultElement.appendChild(listItem);
+              } else {
+                  resultElement.innerHTML = '<li>Không có dữ liệu cho loại phòng này!</li>';
+              }
+          } else {
+              alert('Có lỗi xảy ra khi truy vấn dữ liệu.');
+          }
+      } catch (error) {
+          console.error('Lỗi:', error);
+          alert('Có lỗi xảy ra trong quá trình gửi yêu cầu.');
+      }
+  } else {
+      alert('Vui lòng chọn loại phòng để cho thống kê số 2.');
+  }
+});
+
+
+//--3
+document.getElementById('query3').addEventListener('submit', async function(event) {
+  event.preventDefault();  // Ngừng hành vi mặc định của form (không reload trang)
+
+  const hotelId = document.getElementById('hotel_id').value;
+
+  if (hotelId) {
+      try {
+          // Gửi yêu cầu GET đến server với ID khách sạn nhập vào
+          const response = await fetch(`/admin/statistics/query3?hotel_id=${hotelId}`, {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+              }
+          });
+
+          if (response.ok) {
+              const data = await response.json();
+              // In kết quả trả về vào phần tử #statistics-result
+              const resultElement = document.getElementById('statistics3-result');
+              resultElement.innerHTML = '';  // Clear kết quả cũ
+
+              // Kiểm tra nếu có dữ liệu và in ra
+              if (data.length > 0) {
+                  const item = data[0]; // Chỉ có một kết quả (khách sạn duy nhất)
+                  const row = document.createElement('tr');
+
+                  // Tạo các ô dữ liệu trong bảng
+                  const hotelNameCell = document.createElement('td');
+                  hotelNameCell.textContent = item.hotel_name;
+                  const bookingsCountCell = document.createElement('td');
+                  bookingsCountCell.textContent = item.total_bookings;
+                  const revenueCell = document.createElement('td');
+                  revenueCell.textContent = item.total_revenue.toLocaleString();
+
+                  // Tạo một dòng bảng
+                  row.appendChild(hotelNameCell);
+                  row.appendChild(bookingsCountCell);
+                  row.appendChild(revenueCell);
+
+                  resultElement.appendChild(row);
+              } else {
+                  resultElement.innerHTML = '<tr><td colspan="3" class="text-center">Không có dữ liệu cho khách sạn này!</td></tr>';
+              }
+          } else {
+              alert('Có lỗi xảy ra khi truy vấn dữ liệu.');
+          }
+      } catch (error) {
+          console.error('Lỗi:', error);
+          alert('Có lỗi xảy ra trong quá trình gửi yêu cầu.');
+      }
+  } else {
+      alert('Vui lòng nhập ID khách sạn.');
+  }
+});
+
+//--4
+
+document.getElementById('show-btn').addEventListener('click', async function() {
+  document.getElementById('content').style.display = 'block';  // Hiển thị phần tử
+  document.getElementById('statistics4-result').style.display = 'table-row-group';  // Hiển thị dòng bảng
+
+  const hotelId = 1;  // Ví dụ ID khách sạn, bạn có thể thay đổi nếu cần.
+
+  try {
+    const response = await fetch(`/admin/statistics/query4?hotel_id=${hotelId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    if (response.ok) {
+      const results = await response.json();
+      const tbody = document.getElementById('statistics4-result');
+      
+      // Xóa dữ liệu cũ
+      tbody.innerHTML = '';
+
+      if (results && results.length > 0) {
+        // Hiển thị dữ liệu
+        results.forEach(result => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${result.month}</td>
+            <td>${result.year}</td>
+            <td>${result.monthly_revenue.toLocaleString()} VND</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="3">Không có dữ liệu</td>';
+        tbody.appendChild(tr);
+      }
+    } else {
+      console.error('Failed to fetch data');
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+});
+
+document.getElementById('hide-btn').addEventListener('click', function() {
+  document.getElementById('content').style.display = 'none';  // Ẩn phần tử
+  document.getElementById('statistics4-result').style.display = 'none';  // Ẩn dòng bảng
+});
+
+
+// --5
+
+document.getElementById('search-btn5').addEventListener('click', async function() {
+  // Lấy hotel_id từ ô nhập liệu
+  const hotelId = document.getElementById('hotel_id5').value.trim();
+  
+  if (!hotelId) {
+    alert('Vui lòng nhập ID khách sạn');
+    return;
+  }
+
+  console.log("hotel id for query 5 is ", hotelId);
+
+  // Hiển thị phần tử sau khi tìm kiếm
+  document.getElementById('content5').style.display = 'block';  
+  document.getElementById('statistics5-result').style.display = 'table-row-group';  
+
+
+  // Gửi request tới server
+  const response = await fetch(`/admin/statistics/query5?hotel_id=${hotelId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+
+  // Xử lý dữ liệu trả về từ server
+  const data = await response.json();
+  
+  if (data && data.length > 0) {
+    // Hiển thị kết quả
+    console.log("check1");
+    const resultBody = document.getElementById('statistics5-result');
+    resultBody.innerHTML = ''; // Xóa dữ liệu cũ
+    data.forEach(result => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${result.hotel_name}</td>
+        <td>${result.available_rooms}</td>
+        <td>${result.total_rooms}</td>
+        <td>${result.vacancy_rate} %</td>
+      `;
+      resultBody.appendChild(row);
+    });
+  } else {
+    // Nếu không có dữ liệu
+    const resultBody = document.getElementById('statistics5-result');
+    resultBody.innerHTML = '<tr><td colspan="4">Không có dữ liệu</td></tr>';
+  }
+});
+
+document.getElementById('show-btn5').addEventListener('click', function() {
+  document.getElementById('content5').style.display = 'block';
+  document.getElementById('statistics5-result').style.display = 'table-row-group';
+});
+
+document.getElementById('hide-btn5').addEventListener('click', function() {
+  document.getElementById('content5').style.display = 'none';
+  document.getElementById('statistics5-result').style.display = 'none';
+});
+

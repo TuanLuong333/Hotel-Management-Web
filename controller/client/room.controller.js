@@ -2,6 +2,7 @@ const RoomModel = require("../../models/room.model");
 const HotelModel = require("../../models/hotel.model");
 const BookingModel = require("../../models/booking.model");
 const AddressModel = require("../../models/address.model");
+const ServiceModel = require("../../models/service.model");
 const { Op } = require("sequelize");
 
 module.exports.index = async (req, res) => {
@@ -42,12 +43,12 @@ module.exports.index = async (req, res) => {
 module.exports.reservation = async (req, res) => {
     try {
         console.log("reserve1");
-        const { room_id, guest_name, check_in_date, check_out_date } = req.body;
+        const { room_id, guest_name, check_in_date, check_out_date, service_choice  } = req.body;
 
         
         console.log("reserve1.5");
         // Kiểm tra thông tin cần thiết
-        if (!room_id || !guest_name || !check_in_date || !check_out_date) {
+        if (!room_id || !guest_name || !check_in_date || !check_out_date || !service_choice) {
             return res.status(400).json({ success: false, message: 'Missing required information for reservation' });
         }
 
@@ -80,9 +81,26 @@ module.exports.reservation = async (req, res) => {
         if (daysStay <= 0) {
             return res.status(400).json({ success: false, message: 'Check-out date must be after check-in date' });
         }
+
+        let service_cost = 0;
+
+        if (service_choice == "yes") {
+            service_cost = 5000;
+        }
         
-        const total_amount = daysStay * room.price;
+        const total_amount = daysStay * room.price + service_cost;
         const hotel_id = room.hotel_id;
+        var serviceEntry;
+
+        if (service_choice === "yes") {
+        
+            serviceEntry = await ServiceModel.create({
+                hotel_id: room.hotel_id,
+                service_name: "Additional Service",
+                cost: service_cost,
+                booking_id: null // Set booking_id to null initially, will be updated later if needed
+            });
+        }
 
         const reservation = await BookingModel.create({
             guest_name,

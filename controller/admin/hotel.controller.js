@@ -45,6 +45,7 @@ module.exports.index = async (req, res) => {
     offset: objectPagination.skip,
     where: find
   });
+  
   res.render("admin/pages/hotel/index", {
     pageTitle: "Trang quan ly cac khach san",
     Hotel : Hotel,

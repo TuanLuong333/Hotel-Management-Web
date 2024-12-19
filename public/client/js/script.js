@@ -69,33 +69,37 @@ function showDetails(button) {
       overlay.classList.add('active');
     });
 }
-
 document.getElementById('layoutOverlay').addEventListener('click', function (event) {
   if (event.target === this) {
     this.classList.remove('active');
   }
 });
 
-function bookRoom() {
-  // Hiển thị prompt yêu cầu người dùng nhập tên
-  var userName = prompt("Please enter your name to book this room:");
-}
-
-
-
-//booking
+// booking a room by guest
 function openBookingModal(roomId) {
   document.querySelector('#bookingForm input[name="room_id"]').value = roomId;
-  $('#bookingModal').modal('show'); // Use jQuery to show the modal
+  document.getElementById('bookingModal').style.display = 'flex';
 }
-// Submit booking information
+
+function closeBookingModal() {
+  document.getElementById('bookingModal').style.display = 'none';
+}
+
+$(function() {
+  $("#checkIn, #checkOut").datepicker({
+    dateFormat: "yy-mm-dd",
+    minDate: 0
+  });
+});
+
 async function submitBooking() {
   const form = document.querySelector('#bookingForm');
   const formData = {
     room_id: form.room_id.value,
     guest_name: form.guest_name.value,
     check_in_date: form.check_in_date.value,
-    check_out_date: form.check_out_date.value
+    check_out_date: form.check_out_date.value,
+    service_choice: form.service_choice.value
   };
 
   try {
@@ -122,4 +126,3 @@ async function submitBooking() {
     alert('mising information or date is not available those days');
   }
 }
-//end booking
