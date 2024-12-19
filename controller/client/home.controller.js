@@ -10,7 +10,7 @@ module.exports.index = async (req, res) => {
     console.log("Entering index function in room.controller");
 
     // Tạo đối tượng điều kiện tìm kiếm cho phòng (Room)
-    let find = { };
+    let find = {status: 'Available' };
     // status: 'Available' 
     const address = req.query.address;
     const type = req.query.room_type;

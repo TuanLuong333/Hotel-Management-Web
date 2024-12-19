@@ -48,5 +48,14 @@ block main
               .form-group
                 label(for="check_out_date") Check-out Date
                 input.form-control(type="date", name="check_out_date", required)
+
+              .form-group
+                label(for="service_choice") Prefer Service
+                .form-check
+                  input.form-check-input(type="radio", name="service_choice", value="yes", id="service_yes")
+                  label.form-check-label(for="service_yes") Yes
+                .form-check
+                  input.form-check-input(type="radio", name="service_choice", value="no", id="service_no")
+                  label.form-check-label(for="service_no") No
               
               button.btn.btn-primary(type="button", onclick="submitBooking()") Submit

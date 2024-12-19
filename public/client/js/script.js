@@ -88,7 +88,8 @@ async function submitBooking() {
     room_id: form.room_id.value,
     guest_name: form.guest_name.value,
     check_in_date: form.check_in_date.value,
-    check_out_date: form.check_out_date.value
+    check_out_date: form.check_out_date.value,
+    service_choice: form.service_choice.value // Capture service choice
   };
 
   try {
@@ -112,7 +113,8 @@ async function submitBooking() {
     }
   } catch (error) {
     console.error('Error:', error);
-    alert('mising information or date is not available those days');
+    alert('Missing information or date is not available those days');
   }
 }
+
 //end booking

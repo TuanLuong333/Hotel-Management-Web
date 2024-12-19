@@ -20,6 +20,26 @@ if (buttonsStatus.length > 0) {
 }
 // end button booking status
 
+
+// pagination
+const buttonsPagination = document.querySelectorAll("[button-pagination]");
+if (buttonsPagination) {
+  let url = new URL(window.location.href);
+  console.log("being in pagination");
+
+  buttonsPagination.forEach(button => {
+    button.addEventListener("click", () => {
+      const page = button.getAttribute("button-pagination");
+
+      url.searchParams.set("page", page);
+
+      window.location.href = url.href;
+    })
+  })
+}
+// end pagination
+
+
 // form search
 // const formSearch = document.querySelector("#form-search");
 // if(formSearch) {
