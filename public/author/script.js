@@ -83,3 +83,34 @@ if(LoginForm) {
  }
 
 //end login
+
+
+const customerButton = document.getElementById('customerButton');
+const adminButton = document.getElementById('adminButton');
+const fingerCustomer = document.getElementById('fingerCustomer');
+const fingerAdmin = document.getElementById('fingerAdmin');
+
+// Sự kiện di chuột vào nút Customer
+customerButton.addEventListener('mouseover', function(event) {
+    const buttonRect = event.target.getBoundingClientRect();
+    fingerCustomer.style.display = 'block'; // Hiển thị hình ảnh ngón tay
+    fingerCustomer.style.left = `${buttonRect.left + (buttonRect.width / 2) - (fingerCustomer.width / 2)}px`; // Căn giữa hình ảnh theo chiều ngang
+    fingerCustomer.style.top = `${buttonRect.bottom + 10}px`; // Đặt hình ảnh dưới nút với khoảng cách 10px
+});
+
+// Sự kiện di chuột vào nút Admin
+adminButton.addEventListener('mouseover', function(event) {
+    const buttonRect = event.target.getBoundingClientRect();
+    fingerAdmin.style.display = 'block'; // Hiển thị hình ảnh ngón tay
+    fingerAdmin.style.left = `${buttonRect.left + (buttonRect.width / 2) - (fingerAdmin.width / 2)}px`; // Căn giữa hình ảnh theo chiều ngang
+    fingerAdmin.style.top = `${buttonRect.bottom + 10}px`; // Đặt hình ảnh dưới nút với khoảng cách 10px
+});
+
+// Sự kiện khi di chuột ra khỏi nút (ẩn hình ảnh ngón tay)
+customerButton.addEventListener('mouseout', function() {
+    fingerCustomer.style.display = 'none'; // Ẩn hình ảnh ngón tay
+});
+
+adminButton.addEventListener('mouseout', function() {
+    fingerAdmin.style.display = 'none'; // Ẩn hình ảnh ngón tay
+});
