@@ -14,7 +14,7 @@ document.getElementById("registerForm").addEventListener("submit", async (event)
     const fullName = document.getElementById("fullName").value;
 
     try {
-        const response = await fetch("http://localhost:5000/author/register", {
+        const response = await fetch("/author/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -30,7 +30,7 @@ document.getElementById("registerForm").addEventListener("submit", async (event)
         const data = await response.json();
 
         if (response.ok) {
-            window.location.href = "http://localhost:5000/author/login";
+            window.location.href = "/author/login";
             alert(data.msg);
         } else {
             alert(`Error: ${data.msg}`);
@@ -56,7 +56,7 @@ if(LoginForm) {
         const password = document.getElementById("password").value;
     
         try {
-            const response = await fetch("http://localhost:5000/author/login", {
+            const response = await fetch("/author/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -70,7 +70,7 @@ if(LoginForm) {
             if (response.ok) {
                 alert(data.msg); // Hiển thị thông báo đăng nhập thành công
                 localStorage.setItem("user", JSON.stringify(data.user));
-                window.location.href = "http://localhost:5000";
+                window.location.href = "/";
             } else {
                 alert(`Error: ${data.msg}`); // Hiển thị lỗi nếu có
             }
@@ -83,3 +83,34 @@ if(LoginForm) {
  }
 
 //end login
+
+
+const customerButton = document.getElementById('customerButton');
+const adminButton = document.getElementById('adminButton');
+const fingerCustomer = document.getElementById('fingerCustomer');
+const fingerAdmin = document.getElementById('fingerAdmin');
+
+// Sự kiện di chuột vào nút Customer
+customerButton.addEventListener('mouseover', function(event) {
+    const buttonRect = event.target.getBoundingClientRect();
+    fingerCustomer.style.display = 'block'; // Hiển thị hình ảnh ngón tay
+    fingerCustomer.style.left = `${buttonRect.left + (buttonRect.width / 2) - (fingerCustomer.width / 2)}px`; // Căn giữa hình ảnh theo chiều ngang
+    fingerCustomer.style.top = `${buttonRect.bottom + 10}px`; // Đặt hình ảnh dưới nút với khoảng cách 10px
+});
+
+// Sự kiện di chuột vào nút Admin
+adminButton.addEventListener('mouseover', function(event) {
+    const buttonRect = event.target.getBoundingClientRect();
+    fingerAdmin.style.display = 'block'; // Hiển thị hình ảnh ngón tay
+    fingerAdmin.style.left = `${buttonRect.left + (buttonRect.width / 2) - (fingerAdmin.width / 2)}px`; // Căn giữa hình ảnh theo chiều ngang
+    fingerAdmin.style.top = `${buttonRect.bottom + 10}px`; // Đặt hình ảnh dưới nút với khoảng cách 10px
+});
+
+// Sự kiện khi di chuột ra khỏi nút (ẩn hình ảnh ngón tay)
+customerButton.addEventListener('mouseout', function() {
+    fingerCustomer.style.display = 'none'; // Ẩn hình ảnh ngón tay
+});
+
+adminButton.addEventListener('mouseout', function() {
+    fingerAdmin.style.display = 'none'; // Ẩn hình ảnh ngón tay
+});

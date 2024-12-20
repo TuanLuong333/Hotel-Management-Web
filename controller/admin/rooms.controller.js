@@ -146,7 +146,7 @@ module.exports.create = async (req, res) => {
 
     const roomNumberExists = await RoomModel.findOne({ where: { room_number } });
     if (roomNumberExists) {
-      return res.status(400).json({ success: false, message: `Phòng với ID ${room_id} đã tồn tại số phòng trong database` });
+      return res.status(400).json({ success: false, message: `Phòng với ID ${room_id} đã tồn tại số phòng` });
     }
 
 

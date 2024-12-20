@@ -1,28 +1,3 @@
-// button status
-// const buttonsStatus = document.querySelectorAll("[button-status]");
-// if (buttonsStatus.length > 0) {
-//     let url = new URL(window.location.href);
-
-//     buttonsStatus.forEach(button => {
-//         button.addEventListener("click", () => {
-//             const status = button.getAttribute("button-status");
-
-//             if (status) {
-//                 url.searchParams.set("status", status);
-//             } else {
-//                 url.searchParams.delete("status");
-//             }
-
-//             window.location.href = url.href;
-//         });
-//     });
-// }
-// end button status
-
-
-
-
-// form search
 const formSearch = document.querySelector("#form-search");
 if (formSearch) {
   let url = new URL(window.location.href);
@@ -52,12 +27,9 @@ if (formSearch) {
     window.location.href = url.href;
   });
 }
-
 // end form search
 
-
 //Pagination
-
 const buttonsPagination = document.querySelectorAll("[button-pagination]");
 if (buttonsPagination) {
   let url = new URL(window.location.href);
@@ -75,13 +47,51 @@ if (buttonsPagination) {
 }
 //EndPagination
 
+function changeButtonText(button, text) {
+  button.textContent = text;
+}
 
-//booking
+function showDetails(button) {
+  const roomId = button.getAttribute('data-room-id');
+  const overlay = document.getElementById('layoutOverlay');
+  const content = overlay.querySelector('.overlay-content');
+
+  // Gửi yêu cầu AJAX để lấy thông tin chi tiết phòng
+  fetch(`/rooms/?room_id=${roomId}`)
+    .then(response => response.text())
+    .then(data => {
+      content.innerHTML = data; // Render nội dung chi tiết vào overlay
+      overlay.classList.add('active'); // Hiển thị overlay
+    })
+    .catch(error => {
+      console.error('Lỗi khi tải thông tin phòng:', error);
+      content.innerHTML = '<div class="content"><p>Lỗi khi tải thông tin phòng.</p></div>';
+      overlay.classList.add('active');
+    });
+}
+document.getElementById('layoutOverlay').addEventListener('click', function (event) {
+  if (event.target === this) {
+    this.classList.remove('active');
+  }
+});
+
+// booking a room by guest
 function openBookingModal(roomId) {
   document.querySelector('#bookingForm input[name="room_id"]').value = roomId;
-  $('#bookingModal').modal('show'); // Use jQuery to show the modal
+  document.getElementById('bookingModal').style.display = 'flex';
 }
-// Submit booking information
+
+function closeBookingModal() {
+  document.getElementById('bookingModal').style.display = 'none';
+}
+
+$(function() {
+  $("#checkIn, #checkOut").datepicker({
+    dateFormat: "yy-mm-dd",
+    minDate: 0
+  });
+});
+
 async function submitBooking() {
   const form = document.querySelector('#bookingForm');
   const formData = {
@@ -89,7 +99,7 @@ async function submitBooking() {
     guest_name: form.guest_name.value,
     check_in_date: form.check_in_date.value,
     check_out_date: form.check_out_date.value,
-    service_choice: form.service_choice.value // Capture service choice
+    service_choice: form.service_choice.value
   };
 
   try {
@@ -113,8 +123,6 @@ async function submitBooking() {
     }
   } catch (error) {
     console.error('Error:', error);
-    alert('Missing information or date is not available those days');
+    alert('mising information or date is not available those days');
   }
 }
-
-//end booking

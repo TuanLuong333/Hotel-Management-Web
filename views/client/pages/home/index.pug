@@ -4,7 +4,9 @@ include ../../mixins/pagination.pug
 block head
   meta(charset="UTF-8")
   meta(name="viewport" content="width=device-width, initial-scale=1.0")
-  link(rel="stylesheet" href="/css/Styles.css")  
+  link(rel="stylesheet" href="/css/Styles.css") 
+  link(rel="stylesheet" href="/css/style.css") 
+
 
 block main
   .header-container.d-flex.justify-content-between.align-items-center
@@ -62,8 +64,17 @@ block main
             else
               span.badge.badge-secondary Không xác định
           td
-            a.btn.btn-info.btn-sm(href=`/rooms/?room_id=${item.room_id}`) Chi tiết
+            button.btn.btn-info.btn-sm(
+              type="button", 
+              data-room-id=item.room_id, 
+              onmouseover="showDetails(this); changeButtonText(this, 'Booking')",
+              onmouseout="changeButtonText(this, 'Chi tiết')",
+              ) Chi tiết
+
+  #layoutOverlay.overlay
+    .overlay-content
 
   footer
     .pagination-container
       +pagination(pagination)
+

@@ -1,11 +1,50 @@
 extends ../layouts/default.pug
 
+block head
+  meta(charset="UTF-8")
+  meta(name="viewport" content="width=device-width, initial-scale=1.0")
+  title Hotel Management
+  link(rel="stylesheet" href="/css/author.css")
 
 block main
-  h1 Log - Reg
+  .container
+    h1 Welcome to our Hotel 
+    // Tạo hai nút bấm cho Customer và Admin
+    .buttons
+      a(href="/") 
+        button.button#customerButton Customer
+      a(href="/admin/dashboard")
+        button.button#adminButton Admin
 
-  // Tạo hai nút bấm cho Customer và Admin
-  a(href="/") 
-    button Customer
-  a(href="/admin/dashboard")
-    button Admin
+    img#fingerCustomer.finger-img(src="/images/finger.png" alt="Finger Icon" style="display:none; position:absolute;")
+    img#fingerAdmin.finger-img(src="/images/finger.png" alt="Finger Icon" style="display:none; position:absolute;")
+
+block scripts
+  script.
+    const customerButton = document.getElementById('customerButton');
+    const adminButton = document.getElementById('adminButton');
+    const fingerCustomer = document.getElementById('fingerCustomer');
+    const fingerAdmin = document.getElementById('fingerAdmin');
+
+    customerButton.addEventListener('mouseover', function(event) {
+        const buttonRect = event.target.getBoundingClientRect();
+        fingerCustomer.style.display = 'block'; 
+        fingerCustomer.style.left = `${buttonRect.left + (buttonRect.width / 2) - (fingerCustomer.width / 2)}px`; 
+        fingerCustomer.style.top = `${buttonRect.bottom + 10}px`; 
+    });
+
+
+    adminButton.addEventListener('mouseover', function(event) {
+        const buttonRect = event.target.getBoundingClientRect();
+        fingerAdmin.style.display = 'block'; 
+        fingerAdmin.style.left = `${buttonRect.left + (buttonRect.width / 2) - (fingerAdmin.width / 2)}px`; 
+        fingerAdmin.style.top = `${buttonRect.bottom + 10}px`; 
+    });
+
+    customerButton.addEventListener('mouseout', function() {
+        fingerCustomer.style.display = 'none'; 
+    });
+
+    adminButton.addEventListener('mouseout', function() {
+        fingerAdmin.style.display = 'none'; 
+    });

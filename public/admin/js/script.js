@@ -824,4 +824,3 @@ document.getElementById('hide-btn5').addEventListener('click', function() {
   document.getElementById('statistics5-result').style.display = 'none';
 });
 
-
