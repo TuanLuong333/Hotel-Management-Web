@@ -27,7 +27,8 @@ const sequelize = new Sequelize(
     process.env.MYSQL_PASSWORD, // Mật khẩu
     {
         host: process.env.MYSQL_HOST, // Host của MySQL
-        dialect: 'mysql' // Cổng mặc định của MySQL
+        port: process.env.MYSQL_PORT,// Cổng mặc định của MySQL
+        dialect: 'mysql',
     }
 );
 
