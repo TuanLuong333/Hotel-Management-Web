@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Gửi yêu cầu DELETE tới API
       try {
-        const response = await fetch(`http://localhost:3000/admin/bookings/delete?bookingId=${bookingId}`, {
+        const response = await fetch(`/admin/bookings/delete?bookingId=${bookingId}`, {
           method: 'DELETE',  // Phương thức DELETE
           headers: {
             'Content-Type': 'application/json'// Nếu có CSRF token, bạn cần gửi token này
@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Gửi yêu cầu DELETE tới API
       try {
-        const response = await fetch(`http://localhost:3000/admin/hotels/delete?hotelId=${hotelId}`, {
+        const response = await fetch(`/admin/hotels/delete?hotelId=${hotelId}`, {
           method: 'DELETE',  // Phương thức DELETE
           headers: {
             'Content-Type': 'application/json'// Nếu có CSRF token, bạn cần gửi token này
@@ -403,7 +403,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Gửi yêu cầu DELETE tới API
       try {
-        const response = await fetch(`http://localhost:3000/admin/rooms/delete?roomId=${roomId}`, {
+        const response = await fetch(`/admin/rooms/delete?roomId=${roomId}`, {
           method: 'DELETE',  // Phương thức DELETE
           headers: {
             'Content-Type': 'application/json'// Nếu có CSRF token, bạn cần gửi token này
