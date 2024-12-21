@@ -51,8 +51,9 @@ block main
             td= item.address_id
             td= item.description
             td
-              a.btn.btn-primary.btn-sm(href=`/admin/hotels/edit/?hotelId=${item.hotel_id}`) Edit
-              button.btn.btn-danger.btn-sm(type="button" class="delete-btn" data-hotel-id=item.hotel_id) Delete
+              .d-flex
+                a.btn.btn-primary.btn-sm(href=`/admin/hotels/edit/?hotelId=${item.hotel_id}`) Edit
+                button.btn.btn-danger.btn-sm(type="button" class="delete-btn" data-hotel-id=item.hotel_id) Delete
 
     +pagination(pagination)
 
