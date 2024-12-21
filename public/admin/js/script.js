@@ -39,79 +39,60 @@ if (buttonsPagination) {
 }
 // end pagination
 
-
-// form search
-// const formSearch = document.querySelector("#form-search");
-// if(formSearch) {
-//     let url = new URL(window.location.href);
-
-//     formSearch.addEventListener("submit", (e) => {
-//         e.preventDefault();
-//         const keyword = e.target.elements.keyword.value;
-
-//         if(keyword) {
-//             url.searchParams.set("keyword", keyword);
-//         } else {
-//             url.searchParams.delete("keyword");
-//         }
-
-//         window.location.href = url.href;
-//     });
-// }
-// end form search
-
-// form search with date
 document.addEventListener('DOMContentLoaded', function() {
-  const deleteConfirmModal = document.getElementById('deleteConfirmModal');
   const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
   const cancelDeleteBtn = document.querySelector('.btn-secondary');  // Nút "Hủy"
+  const alertContainer = document.querySelector('.alert-container');  // Cảnh báo thông báo
 
-  // Khi modal được mở, lấy booking_id từ button Delete
-  deleteConfirmModal.addEventListener('show.bs.modal', function (event) {
-    const button = event.relatedTarget;  // Nút "Delete"
-    const bookingId = button.getAttribute('data-booking-id'); 
-    console.log('book id got is',bookingId); // Lấy booking_id
+  // Lấy booking_id khi nhấn nút "Delete"
+  let bookingIdToDelete = null;  // Biến lưu trữ booking_id cần xóa
 
-    // Lưu booking_id để sử dụng khi xác nhận
-    confirmDeleteBtn.onclick = async function() {
-      console.log('Booking ID to delete:', bookingId);  // Debug log for delete action
+  // Khi nút Delete được nhấn
+  const deleteBtns = document.querySelectorAll('.btn-danger');
+  deleteBtns.forEach(function(button) {
+    button.addEventListener('click', function(event) {
+      bookingIdToDelete = event.target.getAttribute('data-booking-id');  // Lấy booking_id
+      console.log('Booking ID got is', bookingIdToDelete);  // Debug log
 
-      // Gửi yêu cầu DELETE tới API
-      try {
-        const response = await fetch(`/admin/bookings/delete?bookingId=${bookingId}`, {
-          method: 'DELETE',  // Phương thức DELETE
-          headers: {
-            'Content-Type': 'application/json'// Nếu có CSRF token, bạn cần gửi token này
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to delete booking');
-        }
-
-        const result = await response.json();
-
-        // Đóng modal sau khi xóa thành công
-        const modal = bootstrap.Modal.getInstance(deleteConfirmModal); // Lấy instance của modal
-        modal.hide();
-
-        // Cập nhật lại giao diện sau khi xóa
-        // Có thể thêm mã để tự động reload trang hoặc loại bỏ booking đã xóa khỏi bảng
-        location.reload();
-      } catch (error) {
-        console.error('Error deleting booking:', error);
-      }
-    };
+      // Hiển thị cảnh báo xóa
+      alertContainer.style.display = 'block';
+    });
   });
 
-  // Khi nhấn nút "Hủy", đóng modal
+  // Khi nhấn nút "Xóa" trong cảnh báo
+  confirmDeleteBtn.addEventListener('click', async function() {
+    console.log('Booking ID to delete:', bookingIdToDelete);  // Debug log
+
+    try {
+      // Gửi yêu cầu DELETE đến API
+      const response = await fetch(`/admin/bookings/delete?bookingId=${bookingIdToDelete}`, {
+        method: 'DELETE',  // Phương thức DELETE
+        headers: {
+          'Content-Type': 'application/json'  // Thêm CSRF token nếu cần
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete booking');
+      }
+
+      const result = await response.json();
+
+      // Đóng cảnh báo sau khi xóa thành công
+      alertContainer.style.display = 'none';
+
+      // Cập nhật lại giao diện (reload trang hoặc cập nhật lại danh sách booking)
+      location.reload();
+    } catch (error) {
+      console.error('Error deleting booking:', error);
+    }
+  });
+
+  // Khi nhấn nút "Hủy" trong cảnh báo
   cancelDeleteBtn.addEventListener('click', function() {
-    const modal = bootstrap.Modal.getInstance(deleteConfirmModal); // Lấy instance của modal
-    modal.hide();  // Đóng modal
+    alertContainer.style.display = 'none';  // Ẩn cảnh báo khi nhấn "Hủy"
   });
 });
-
-//end delete item
 
 // edit data
 document.addEventListener('DOMContentLoaded', () => {
@@ -552,7 +533,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ------------------ code logic for statistic
 //--1
-
 document.getElementById('query1').addEventListener('submit', async function(event) {
   event.preventDefault(); 
 

@@ -2,102 +2,94 @@ extends ../../layouts/default.pug
 include ../../mixins/pagination.pug
 
 block main
-  h1 Booking Management
+  .container.mt-5
+    .card
+      .card-header
+        h3 Hotel Management
+      .card-body
+        .row.mb-3
+          .col-6
+            each item in filterBooking
+              button(
+                class="btn btn-sm ml-1 btn-outline-success #{item.class}"
+                button-status=item.status
+              ) #{item.name}
+          .col-6
+            form(id="form-search", class="d-flex align-items-center")
+              .input-group
+                input(
+                  type="text"
+                  placeholder="Nhập từ khóa"
+                  name="keyword"
+                  class="form-control"
+                  id="keyword"
+                  value=keyword
+                )
+                .input-group-append
+                  button(
+                    class="btn btn-success"
+                    type="submit"
+                  ) Tìm
+                select(
+                  class="form-control"
+                  name="column"
+                  id="column-select"
+                )
+                  option(value="0") Khách hàng
+                  option(value="1") Id phòng
+                  option(value="2") Id khách sạn
+                  option(value="3") check_in
+                  option(value="4") check_out
+                  option(value="5") Tổng tiền
 
-  .card
-    .card-header
-      h3 Hotel Management
-    .card-body
-      //- Filter Booking Buttons
-      .row.mb-3
-        .col-6
-          each item in filterBooking
-            button(
-              class="btn btn-sm ml-1 btn-outline-success #{item.class}"
-              button-status=item.status
-            ) #{item.name}
-        .col-6
-          form(id="form-search", class="d-flex align-items-center")
-            .input-group
-              input(
-                type="text"
-                placeholder="Nhập từ khóa"
-                name="keyword"
-                class="form-control"
-                id="keyword"
-                value=keyword
-              )
-              .input-group-append
-                button(
-                  class="btn btn-success"
-                  type="submit"
-                ) Tìm
-              select(
-                class="form-control"
-                name="column"
-                id="column-select"
-              )
-                option(value="0") Khách hàng
-                option(value="1") Id phòng
-                option(value="2") Id khách sạn
-                option(value="3") check_in
-                option(value="4") check_out
-                option(value="5") Tổng tiền
+      .card-footer
+        p Manage your booking volume easily
+        a.btn.btn-primary(href='/admin/bookings/add') Thêm booking mới
 
-    .card-footer
-      p Manage your booking volume easily
-      a.btn.btn-primary(href='/admin/bookings/add') Thêm booking mới
-
-  //- Booking Table
-  table.table.table-hover.table-sm
-    thead
-      tr
-        th STT
-        th Khách hàng
-        th Id phòng
-        th Id khách sạn
-        th check_in
-        th check_out
-        th status
-        th tổng tiền
-        th Thao tác
-    tbody
-      each item, index in Booking
+    table.table.table-hover.table-sm.mt-3
+      thead
         tr
-          td= index + 1
-          td= item.guest_name
-          td= item.room_id
-          td= item.hotel_id
-          td= item.check_in_date
-          td= item.check_out_date
-          td
-            if item.status === 'confirm'
-              span.badge.badge-success confirm Confirmed
-            else if item.status === 'reject'
-              span.badge.badge-warning reject Rejected
-            else
-              span.badge.badge-secondary Không xác định
-          td= item.total_amount
-          td
-            a.btn.btn-primary(href=`/admin/bookings/edit/?booking_id=${item.booking_id}`) Edit
-            button.btn.btn-danger(
-              type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteConfirmModal"
-              data-booking-id=item.booking_id
-            ) Delete
+          th STT
+          th Khách hàng
+          th Id phòng
+          th Id khách sạn
+          th check_in
+          th check_out
+          th status
+          th tổng tiền
+          th Thao tác
+      tbody
+        each item, index in Booking
+          tr
+            td= index + 1
+            td= item.guest_name
+            td= item.room_id
+            td= item.hotel_id
+            td= item.check_in_date
+            td= item.check_out_date
+            td
+              if item.status === 'confirm'
+                span.badge.badge-success confirm Confirmed
+              else if item.status === 'reject'
+                span.badge.badge-warning reject Rejected
+              else
+                span.badge.badge-secondary Không xác định
+            td= item.total_amount
+            td
+              .d-flex
+                a.btn.btn-primary.btn-sm(href=`/admin/bookings/edit/?booking_id=${item.booking_id}`) Edit
+                button.btn.btn-danger.btn-sm(
+                  type="button"
+                  data-booking-id=item.booking_id
+                ) Delete
 
-  +pagination(pagination)
+    +pagination(pagination)
 
-  //- Modal xác nhận xóa
-  .modal.fade(id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true")
-    .modal-dialog
-      .modal-content
-        .modal-header
-          h5.modal-title(id="deleteConfirmModalLabel") Xác nhận xóa
-          button(type="button" class="btn-close" data-dismiss="modal" aria-label="Close")
-        .modal-body
-          p Bạn có chắc chắn muốn xóa booking này không?
-        .modal-footer
-          button(type="button" class="btn btn-secondary" data-dismiss="modal") Hủy
-          button(type="button" class="btn btn-danger" id="confirmDeleteBtn") Xóa
+    //- Cảnh báo xóa booking
+    .alert-container(style="display: none; position: fixed; top: 20%; left: 50%; transform: translateX(-50%); z-index: 1050;")
+      .alert.alert-danger
+        button.close(type="button" data-dismiss="alert" aria-label="Close")
+          span(aria-hidden="true") &times;
+        p Bạn có chắc chắn muốn xóa booking này?
+        button.btn.btn-danger#confirmDeleteBtn Xóa
+        button.btn.btn-secondary#cancelDeleteBtn Hủy
