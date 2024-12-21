@@ -3,6 +3,10 @@ const router = express.Router();
 
 const controller = require("../../controller/admin/statistic.controller")
 
+router.get('/admin/statistics', (req, res) => {
+  res.render('admin/statistics', { pageTitle: 'Thống kê Doanh Thu' });
+});
+
 router.get("/", controller.index );
 router.get("/query1", controller.query1 );
 router.get("/query2", controller.query2 );

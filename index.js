@@ -1,21 +1,18 @@
 const express = require("express");
-require("dotenv").config();
-var bodyParser = require('body-parser');
 const session = require("express-session");
-
-const database = require("./config/database"); // Nhập sequelize từ tệp cấu hình
+require("dotenv").config();
 
 const systemConfig = require("./config/system");
+const database = require("./config/database");
 
-const route = require("./routes/client/index.route");
-const routeAdmin = require("./routes/admin/index.route");
-const routeAuthor = require("./routes/author/index.route");
-
+const clientRoutes = require("./routes/client/index.route");
+const adminRoutes = require("./routes/admin/index.route");
+const authorRoutes = require("./routes/author/index.route");
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
-// Kết nối đến cơ sở dữ liệu trước khi khởi động ứng dụng
+// Kết nối cơ sở dữ liệu
 database.connect();
 
 app.set("views", "./views");
@@ -23,27 +20,22 @@ app.set("view engine", "pug");
 
 app.use(express.static("public"));
 
-// app local variables
-app.locals.prefixAdmin = systemConfig.prefixAdmin;
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
+// Cấu hình session
 app.use(
   session({
-      secret: "secret", // Đặt khóa bí mật cho session
-      resave: false,
-      saveUninitialized: true,
-      cookie: { secure: false }, // Trong môi trường phát triển, đặt là false
+    secret: "your_secret_key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
   })
 );
 
+// Import routes
+clientRoutes(app);
+adminRoutes(app);
+authorRoutes(app);
 
-// Routes
-routeAuthor(app);
-route(app);
-routeAdmin(app);
-
+// Khởi động server
 app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
+  console.log(`Server is running at http://localhost:${port}`);
 });
