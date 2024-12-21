@@ -226,52 +226,54 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // delete hotel
 document.addEventListener('DOMContentLoaded', function() {
-  const deleteConfirmModal = document.getElementById('deleteConfirmModal');
-  const confirmDeleteBtn = document.getElementById('hotelconfirmDeleteBtn');
-  const cancelDeleteBtn = document.querySelector('.btn-secondary');  // Nút "Hủy"
+  const deleteButtons = document.querySelectorAll('.delete-btn');  // Chọn tất cả các nút "Delete"
+  const alertContainer = document.querySelector('.alert-container');  // Cảnh báo
+  const confirmDeleteBtn = document.getElementById('confirm-delete-btn');  // Nút "Xóa"
+  const cancelDeleteBtn = document.getElementById('cancel-delete-btn');  // Nút "Hủy"
+  let hotelIdToDelete = null;  // Biến để lưu ID khách sạn cần xóa
 
-  // Khi modal được mở, lấy booking_id từ button Delete
-  deleteConfirmModal.addEventListener('show.bs.modal', function (event) {
-    const button = event.relatedTarget;  // Nút "Delete"
-    const hotelId = button.getAttribute('data-hotel-id'); 
-    console.log('hotel id got is',hotelId); // Lấy booking_id
+  // Lặp qua tất cả các nút "Delete"
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', function(event) {
+      hotelIdToDelete = event.target.getAttribute('data-hotel-id');  // Lấy ID khách sạn từ nút "Delete"
+      console.log('hotel id to delete:', hotelIdToDelete);
 
-    // Lưu booking_id để sử dụng khi xác nhận
-    confirmDeleteBtn.onclick = async function() {
-      console.log('hotel ID to delete:', hotelId);  // Debug log for delete action
+      // Hiển thị thông báo cảnh báo
+      alertContainer.style.display = 'block';
+    });
+  });
 
-      // Gửi yêu cầu DELETE tới API
+  // Xử lý khi nhấn vào "Xóa"
+  confirmDeleteBtn.addEventListener('click', async function() {
+    if (hotelIdToDelete) {
       try {
-        const response = await fetch(`/admin/hotels/delete?hotelId=${hotelId}`, {
-          method: 'DELETE',  // Phương thức DELETE
+        // Gửi yêu cầu xóa khách sạn
+        const response = await fetch(`/admin/hotels/delete?hotelId=${hotelIdToDelete}`, {
+          method: 'DELETE',
           headers: {
-            'Content-Type': 'application/json'// Nếu có CSRF token, bạn cần gửi token này
+            'Content-Type': 'application/json'
           }
         });
 
         if (!response.ok) {
-          throw new Error('Failed to delete booking');
+          throw new Error('Failed to delete hotel');
         }
 
         const result = await response.json();
+        console.log(result.message);
 
-        // Đóng modal sau khi xóa thành công
-        const modal = bootstrap.Modal.getInstance(deleteConfirmModal); // Lấy instance của modal
-        modal.hide();
-
-        // Cập nhật lại giao diện sau khi xóa
-        // Có thể thêm mã để tự động reload trang hoặc loại bỏ booking đã xóa khỏi bảng
-        location.reload();
+        // Reload trang sau khi xóa
+        location.reload();  
       } catch (error) {
-        console.error('Error deleting booking:', error);
+        console.error('Error deleting hotel:', error);
       }
-    };
+    }
   });
 
-  // Khi nhấn nút "Hủy", đóng modal
+  // Xử lý khi nhấn "Hủy"
   cancelDeleteBtn.addEventListener('click', function() {
-    const modal = bootstrap.Modal.getInstance(deleteConfirmModal); // Lấy instance của modal
-    modal.hide();  // Đóng modal
+    // Ẩn thông báo cảnh báo khi nhấn "Hủy"
+    alertContainer.style.display = 'none';
   });
 });
 // end delete hotel
@@ -387,55 +389,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // delete room
 document.addEventListener('DOMContentLoaded', function() {
-  const deleteConfirmModal = document.getElementById('deleteConfirmModal');
-  const confirmDeleteBtn = document.getElementById('roomconfirmDeleteBtn');
-  const cancelDeleteBtn = document.querySelector('.btn-secondary');  // Nút "Hủy"
+  const deleteAlertContainer = document.querySelector('.alert-container');
+  const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+  const cancelDeleteBtn = document.getElementById('cancel-delete-btn');
+  let hotelIdToDelete = null;  // Biến lưu trữ id khách sạn cần xóa
 
-  // Khi modal được mở, lấy booking_id từ button Delete
-  deleteConfirmModal.addEventListener('show.bs.modal', function (event) {
-    const button = event.relatedTarget;  // Nút "Delete"
-    const roomId = button.getAttribute('data-room-id'); 
-    console.log('room id got is',roomId); // Lấy booking_id
+  // Khi nhấn nút "Delete" trên booking
+  const deleteBtns = document.querySelectorAll('.delete-btn');
+  deleteBtns.forEach(function(button) {
+    button.addEventListener('click', function(event) {
+      hotelIdToDelete = event.target.getAttribute('data-hotel-id'); // Lấy hotel_id
+      console.log('hotel id got is', hotelIdToDelete); // Debug log
 
-    // Lưu booking_id để sử dụng khi xác nhận
-    confirmDeleteBtn.onclick = async function() {
-      console.log('room ID to delete:', roomId);  // Debug log for delete action
-
-      // Gửi yêu cầu DELETE tới API
-      try {
-        const response = await fetch(`/admin/rooms/delete?roomId=${roomId}`, {
-          method: 'DELETE',  // Phương thức DELETE
-          headers: {
-            'Content-Type': 'application/json'// Nếu có CSRF token, bạn cần gửi token này
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to delete booking');
-        }
-
-        const result = await response.json();
-
-        // Đóng modal sau khi xóa thành công
-        const modal = bootstrap.Modal.getInstance(deleteConfirmModal); // Lấy instance của modal
-        modal.hide();
-
-        // Cập nhật lại giao diện sau khi xóa
-        // Có thể thêm mã để tự động reload trang hoặc loại bỏ booking đã xóa khỏi bảng
-        location.reload();
-      } catch (error) {
-        console.error('Error deleting booking:', error);
-      }
-    };
+      // Hiển thị cảnh báo xóa
+      deleteAlertContainer.style.display = 'block';
+    });
   });
 
-  // Khi nhấn nút "Hủy", đóng modal
+  // Khi nhấn nút "Xóa" trong thông báo
+  confirmDeleteBtn.onclick = async function() {
+    console.log('hotel ID to delete:', hotelIdToDelete);  // Debug log for delete action
+
+    // Gửi yêu cầu DELETE tới API
+    try {
+      const response = await fetch(`/admin/hotels/delete?hotelId=${hotelIdToDelete}`, {
+        method: 'DELETE',  // Phương thức DELETE
+        headers: {
+          'Content-Type': 'application/json' // Nếu có CSRF token, bạn cần gửi token này
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete hotel');
+      }
+
+      const result = await response.json();
+
+      // Ẩn thông báo sau khi xóa thành công
+      deleteAlertContainer.style.display = 'none';
+
+      // Cập nhật lại giao diện sau khi xóa
+      // Có thể thêm mã để tự động reload trang hoặc loại bỏ khách sạn đã xóa khỏi danh sách
+      location.reload();
+    } catch (error) {
+      console.error('Error deleting hotel:', error);
+    }
+  };
+
+  // Khi nhấn nút "Hủy", ẩn thông báo
   cancelDeleteBtn.addEventListener('click', function() {
-    const modal = bootstrap.Modal.getInstance(deleteConfirmModal); // Lấy instance của modal
-    modal.hide();  // Đóng modal
+    deleteAlertContainer.style.display = 'none'; // Ẩn cảnh báo xóa
   });
 });
-
 //end delete item
 
 
@@ -823,4 +828,3 @@ document.getElementById('hide-btn5').addEventListener('click', function() {
   document.getElementById('content5').style.display = 'none';
   document.getElementById('statistics5-result').style.display = 'none';
 });
-

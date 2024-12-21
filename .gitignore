@@ -10,3 +10,6 @@ node_modules/
 # Các tệp hệ điều hành tạo ra
 .DS_Store
 Thumbs.db
+
+# Bỏ qua các tệp .sql
+*.sql

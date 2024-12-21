@@ -7,44 +7,42 @@ block main
       h3 Room Management
     .card-body
       .row
-        .col-6
-          each item in filterRoom
-            button(
-              class="btn btn-sm ml-1 btn-outline-success #{item.class}"
-              button-status=item.status
-            ) #{item.name}
-        .col-6
-          form(id="form-search")
+        .col-12.d-flex.justify-content-between.align-items-center.mb-3
+          .btn-group
+            each item in filterRoom
+              button(
+                class="btn btn-sm btn-outline-success #{item.class}"
+                button-status=item.status
+              ) #{item.name}
+          form(id="form-search" class="d-flex align-items-center")
             .input-group
               input(
                 type="text"
                 placeholder="Nhập từ khóa"
                 name="keyword"
-                class="form-control"
+                class="form-control form-control-sm"
                 id="keyword"
                 value=keyword
               )
               .input-group-append
                 button(
-                  class="btn btn-success"
+                  class="btn btn-success btn-sm"
                   type="submit"
                 ) Tìm
-              select(
-                class="form-control"
-                name="column"
-                id="column-select"
-              )
-                option(value="0") Id khách sạn
-                option(value="1") Số phòng
-                option(value="2") Loại phòng
-                option(value="3") Số lượng người
-                option(value="4") Ảnh minh họa
+            select(
+              class="form-control form-control-sm ml-2"
+              name="column"
+              id="column-select"
+            )
+              option(value="0") Id khách sạn
+              option(value="1") Số phòng
+              option(value="2") Loại phòng
+              option(value="3") Số lượng người
+              option(value="4") Ảnh minh họa
 
-        .card-footer
-          p Manage your room volume easily
-          a.btn.btn-primary(href='/admin/rooms/add') Thêm room mới
-
-
+    .card-footer
+      p Manage your room volume easily
+      a.btn.btn-primary(href='/admin/rooms/add') Thêm room mới
 
   table.table.table-hover.table-sm
     thead
@@ -56,6 +54,7 @@ block main
         th Số lượng người
         th Ảnh minh họa
         th Trạng thái
+        th Thao tác
     tbody
       each item, index in Room
         tr
@@ -77,30 +76,19 @@ block main
             else if item.status == 'Maintainance'
               span.badge.badge-primary Maintainance
             else 
-              span.badge.badge-secondary Không xác định 
+              span.badge.badge-secondary Không xác định
           td= item.total_amount
           td
-            a.btn.btn-primary(href=`/admin/rooms/edit/?roomId=${item.room_id}`) Edit
-            button.btn.btn-danger(
-              type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteConfirmModal"
-              data-room-id=item.room_id
-            ) Delete
-            
+            a.btn.btn-primary.btn-sm(href=`/admin/rooms/edit/?roomId=${item.room_id}`) Edit
+            button.btn.btn-danger.btn-sm(type="button" class="delete-btn" data-hotel-id=item.hotel_id) Delete
+
+    +pagination(pagination)
 
 
-  +pagination(pagination)
-
-  //- Modal xác nhận xóa
-  .modal.fade(id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true")
-    .modal-dialog
-      .modal-content
-        .modal-header
-          h5.modal-title(id="deleteConfirmModalLabel") Xác nhận xóa
-          button(type="button" class="btn-close" data-dismiss="modal" aria-label="Close")
-        .modal-body
-          p Bạn có chắc chắn muốn xóa room này không?
-        .modal-footer
-          button(type="button" class="btn btn-secondary" data-dismiss="modal") Hủy
-          button(type="button" class="btn btn-danger" id="roomconfirmDeleteBtn") Xóa
+    .alert-container(style="display: none; position: fixed; top: 20%; left: 50%; transform: translateX(-50%); z-index: 1050;")
+      .alert.alert-danger
+        button.close(type="button" data-dismiss="alert" aria-label="Close")
+          span(aria-hidden="true") &times;
+        p Bạn có chắc chắn muốn xóa khách sạn này?
+        button.btn.btn-danger#confirm-delete-btn Xóa
+        button.btn.btn-secondary#cancel-delete-btn Hủy

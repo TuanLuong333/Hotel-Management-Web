@@ -2,32 +2,23 @@ extends ../../layouts/default.pug
 include ../../mixins/pagination.pug
 
 block main
-
-  .card
-    .card-header
-      h3 Hotel Management
-    .card-body
-      .row
-        form(id="form-search")
-          .input-group
-            input(
+  .container.mt-5
+    .card
+      .card-header
+        h3 Hotel Management
+      .card-body
+        form(id="form-search" class="row")
+          .input-group.col-md-8
+            input.form-control(
               type="text"
               placeholder="Nhập từ khóa"
               name="keyword"
-              class="form-control"
               id="keyword"
               value=keyword
             )
-            .input-group-append
-              button(
-                class="btn btn-success"
-                type="submit"
-              ) Tìm
-            select(
-              class="form-control"
-              name="column"
-              id="column-select"
-            )
+            button.btn.btn-success(type="submit") Tìm
+          .col-md-4
+            select.form-control(name="column" id="column-select")
               option(value="0") Id Khách sạn
               option(value="1") Tên khách sạn
               option(value="2") Liên lạc
@@ -35,51 +26,41 @@ block main
               option(value="4") Id địa chỉ
               option(value="5") Miêu tả
 
-    .card-footer
-      p Manage your booking volume easily
-      a.btn.btn-primary(href='/admin/hotels/add') Thêm hotel mới
+      .card-footer
+        a.btn.btn-primary.btn-sm(href='/admin/hotels/add') Thêm hotel mới
 
-  table.table.table-hover.table-sm
-    thead
-      tr
-        th STT
-        th Id Khách sạn
-        th Tên khách sạn
-        th Liên lạc
-        th Email
-        th Id địa chỉ
-        th Miêu tả
-    tbody
-      each item, index in Hotel
+    table.table.table-hover.table-sm.mt-3
+      thead
         tr
-          td= index + 1
-          td= item.hotel_id
-          td= item.name
-          td= item.contact_number
-          td= item.email_address
-          td= item.address_id
-          td= item.description
-          td
-            a.btn.btn-primary(href=`/admin/hotels/edit/?hotelId=${item.hotel_id}`) Edit
-            button.btn.btn-danger(
-              type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteConfirmModal"
-              data-hotel-id=item.hotel_id
-            ) Delete
+          th STT
+          th Id Khách sạn
+          th Tên khách sạn
+          th Liên lạc
+          th Email
+          th Id địa chỉ
+          th Miêu tả
+          th Action
+      tbody
+        each item, index in Hotel
+          tr
+            td= index + 1
+            td= item.hotel_id
+            td= item.name
+            td= item.contact_number
+            td= item.email_address
+            td= item.address_id
+            td= item.description
+            td
+              a.btn.btn-primary.btn-sm(href=`/admin/hotels/edit/?hotelId=${item.hotel_id}`) Edit
+              button.btn.btn-danger.btn-sm(type="button" class="delete-btn" data-hotel-id=item.hotel_id) Delete
 
+    +pagination(pagination)
 
-  +pagination(pagination)
-
-  //- Modal xác nhận xóa
-  .modal.fade(id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true")
-    .modal-dialog
-      .modal-content
-        .modal-header
-          h5.modal-title(id="deleteConfirmModalLabel") Xác nhận xóa
-          button(type="button" class="btn-close" data-dismiss="modal" aria-label="Close")
-        .modal-body
-          p Bạn có chắc chắn muốn xóa booking này không?
-        .modal-footer
-          button(type="button" class="btn btn-secondary" data-dismiss="modal") Hủy
-          button(type="button" class="btn btn-danger" id="hotelconfirmDeleteBtn") Xóa
+    //- Thông báo cảnh báo (Alert) khi xóa khách sạn
+    .alert-container(style="display: none; position: fixed; top: 20%; left: 50%; transform: translateX(-50%); z-index: 1050;")
+      .alert.alert-danger
+        button.close(type="button" data-dismiss="alert" aria-label="Close")
+          span(aria-hidden="true") &times;
+        p Bạn có chắc chắn muốn xóa khách sạn này?
+        button.btn.btn-danger#confirm-delete-btn Xóa
+        button.btn.btn-secondary#cancel-delete-btn Hủy

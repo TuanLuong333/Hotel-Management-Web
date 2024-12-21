@@ -1,27 +1,56 @@
 doctype html
 html
   head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
     title #{pageTitle}
-
-    // Nạp Bootstrap 5 CSS
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css")
+    link(href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet")
     
     // Các file CSS tùy chỉnh
     link(rel="stylesheet", href="/css/style.css")
     link(rel="stylesheet", href="/admin/css/style.css")
+    style.
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .navbar {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .sider {
+        height: 100vh;
+        padding-top: 20px;
+        background: #f8f9fa;
+        border-right: 1px solid #ddd;
+      }
+      .sider .list-group-item {
+        border: none;
+        font-size: 16px;
+      }
+      .sider .list-group-item.active {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+      }
+      .sider .list-group-item i {
+        color: #007bff;
+      }
+      main.flex-grow-1 {
+        min-width: 0; 
+        overflow: hidden; 
+      }
   
   body
     // Include header từ partial
     include ../partials/header.pug
 
-    .body
+    .d-flex
+      // Sidebar
       include ../partials/sider.pug
 
-      .main
+      // Main content
+      main.flex-grow-1.p-4
         block main
-
-    // Include footer từ partial
-    include ../partials/footer.pug
 
     // Nạp Bootstrap 5 JS (Không cần jQuery nữa)
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js") 
