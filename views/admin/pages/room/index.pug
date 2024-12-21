@@ -80,24 +80,15 @@ block main
           td= item.total_amount
           td
             a.btn.btn-primary.btn-sm(href=`/admin/rooms/edit/?roomId=${item.room_id}`) Edit
-            button.btn.btn-danger.btn-sm(
-              type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#deleteConfirmModal"
-              data-room-id=item.room_id
-            ) Delete
+            button.btn.btn-danger.btn-sm(type="button" class="delete-btn" data-hotel-id=item.hotel_id) Delete
 
-  +pagination(pagination)
+    +pagination(pagination)
 
-  //- Modal xác nhận xóa
-  .modal.fade(id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true")
-    .modal-dialog
-      .modal-content
-        .modal-header
-          h5.modal-title(id="deleteConfirmModalLabel") Xác nhận xóa
-          button(type="button" class="btn-close" data-dismiss="modal" aria-label="Close")
-        .modal-body
-          p Bạn có chắc chắn muốn xóa room này không?
-        .modal-footer
-          button(type="button" class="btn btn-secondary" data-dismiss="modal") Hủy
-          button(type="button" class="btn btn-danger" id="roomconfirmDeleteBtn") Xóa
+
+    .alert-container(style="display: none; position: fixed; top: 20%; left: 50%; transform: translateX(-50%); z-index: 1050;")
+      .alert.alert-danger
+        button.close(type="button" data-dismiss="alert" aria-label="Close")
+          span(aria-hidden="true") &times;
+        p Bạn có chắc chắn muốn xóa khách sạn này?
+        button.btn.btn-danger#confirm-delete-btn Xóa
+        button.btn.btn-secondary#cancel-delete-btn Hủy

@@ -2,13 +2,14 @@ extends ../../layouts/default.pug
 include ../../mixins/pagination.pug
 
 block main
-  h1 Booking Manage
+  h1 Booking Management
 
   .card
     .card-header
       h3 Hotel Management
     .card-body
-      .row
+      //- Filter Booking Buttons
+      .row.mb-3
         .col-6
           each item in filterBooking
             button(
@@ -16,7 +17,7 @@ block main
               button-status=item.status
             ) #{item.name}
         .col-6
-          form(id="form-search")
+          form(id="form-search", class="d-flex align-items-center")
             .input-group
               input(
                 type="text"
@@ -43,12 +44,11 @@ block main
                 option(value="4") check_out
                 option(value="5") Tổng tiền
 
-        .card-footer
-          p Manage your booking volume easily
-          a.btn.btn-primary(href='/admin/bookings/add') Thêm booking mới
+    .card-footer
+      p Manage your booking volume easily
+      a.btn.btn-primary(href='/admin/bookings/add') Thêm booking mới
 
-
-
+  //- Booking Table
   table.table.table-hover.table-sm
     thead
       tr
@@ -60,6 +60,7 @@ block main
         th check_out
         th status
         th tổng tiền
+        th Thao tác
     tbody
       each item, index in Booking
         tr
@@ -71,9 +72,9 @@ block main
           td= item.check_out_date
           td
             if item.status === 'confirm'
-              span.badge.badge-success confirm
+              span.badge.badge-success confirm Confirmed
             else if item.status === 'reject'
-              span.badge.badge-warning reject
+              span.badge.badge-warning reject Rejected
             else
               span.badge.badge-secondary Không xác định
           td= item.total_amount
@@ -85,8 +86,6 @@ block main
               data-bs-target="#deleteConfirmModal"
               data-booking-id=item.booking_id
             ) Delete
-            
-
 
   +pagination(pagination)
 
